@@ -12,7 +12,6 @@ import {
 const AdminDashboard = () => {
   return (
     <div className="min-h-[calc(100vh-4rem)] flex">
-      {/* Dashboard Content */}
       <div className="w-full lg:w-1/2 p-8">
         <h1 className="text-3xl font-bold text-gray-900 mb-8">
           Admin Dashboard
@@ -89,7 +88,6 @@ const AdminDashboard = () => {
         </div>
       </div>
 
-      {/* Stats and Activity */}
       <div className="hidden lg:block w-1/2 bg-gray-50 p-8">
         <div className="max-w-lg mx-auto space-y-8">
           <div className="bg-white rounded-lg shadow-md p-6">

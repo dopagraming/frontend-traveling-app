@@ -64,7 +64,6 @@ const Booking = () => {
       });
       window.location.href = res.data.session.url;
     } catch (error) {
-      console.log(error);
       DisplayErrors(error);
     }
   };

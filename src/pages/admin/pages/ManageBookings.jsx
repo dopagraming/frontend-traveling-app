@@ -1,6 +1,5 @@
 import { Link } from "react-router";
 import useGetItmes from "../../../hooks/useGetProducts";
-import AddTripModel from "../models/AddTrip";
 import DeleteConfirmationModal from "../models/DeleteConfirmationModal";
 import useModalState from "../../../hooks/useModalState";
 import AddBookingModel from "../models/AddBookingModel";
@@ -86,7 +85,7 @@ export default function Bookings() {
                 {data?.map((product, index) => (
                   <tr key={index}>
                     <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-0">
-                      {product?.trip?.title}
+                      {product?.tripName}
                     </td>
                     <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
                       {product?.userName}

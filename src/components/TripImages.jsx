@@ -19,7 +19,6 @@ const TripImages = ({ trip }) => {
         />
       </div>
 
-      {/* Right column with two images */}
       <div className="col-span-3 space-y-4">
         <div className="relative h-[242px] overflow-hidden rounded-xl">
           <img

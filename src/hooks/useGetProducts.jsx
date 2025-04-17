@@ -8,7 +8,7 @@ const fetchItems = async (itemModle) => {
 };
 
 const useGetItmes = (itemModle) => {
-  const { data, isLoading, error, refetch } = useQuery({
+  const { data, isLoading, error, refetch, isError } = useQuery({
     queryKey: [`${itemModle}`],
     queryFn: () => fetchItems(itemModle),
     onError: (error) => {
@@ -18,6 +18,7 @@ const useGetItmes = (itemModle) => {
   return {
     data,
     isLoading,
+    isError,
     error,
     refetch,
   };

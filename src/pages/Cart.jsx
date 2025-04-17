@@ -3,7 +3,6 @@ import { Link } from "react-router-dom";
 import { Trash2, Calendar } from "lucide-react";
 import { trips } from "../data/trips";
 
-// Mock cart data
 const cartItems = [
   {
     tripId: "1",
@@ -40,7 +39,6 @@ const Cart = () => {
         </div>
       ) : (
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          {/* Cart Items */}
           <div className="lg:col-span-2 space-y-4">
             {cartItems.map((item) => {
               const trip = trips.find((t) => t.id === item.tripId);
@@ -90,7 +88,6 @@ const Cart = () => {
             })}
           </div>
 
-          {/* Order Summary */}
           <div className="lg:col-span-1">
             <div className="bg-white rounded-lg shadow-lg p-6 sticky top-8">
               <h2 className="text-xl font-bold text-gray-900 mb-6">

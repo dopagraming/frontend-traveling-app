@@ -1,37 +1,23 @@
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
-import { Search, Calendar, CreditCard, Star } from "lucide-react";
 import TripCard from "../components/TripCard";
-import {
-  attractions,
-  categories,
-  faqs,
-  specificTrips,
-  trips,
-} from "../data/trips";
+import { attractions, categories, faqs, specificTrips } from "../data/trips";
 import heroImg from "../assests/images/hero.webp";
 import { LuCastle } from "react-icons/lu";
 import { CiForkAndKnife } from "react-icons/ci";
 import { PiMountainsLight } from "react-icons/pi";
 import { MdOutlineSportsHandball } from "react-icons/md";
 import SendEmail from "../components/SendEmail";
-import api from "../lib/axios";
+import DisplayTrips from "../components/DisplayTrips";
+import useGetItmes from "../hooks/useGetProducts";
 const Home = () => {
-  const [trips, setTrips] = useState([]);
+  const { isLoading, isError, error, data } = useGetItmes("trips");
+  if (isLoading) {
+    return <div className="min-h-[100vh]">Loading...</div>;
+  }
 
-  useEffect(() => {
-    const fetchTrips = async () => {
-      const response = await api.get("trips");
-      setTrips(response.data.data);
-    };
-
-    fetchTrips();
-  }, []);
-
-  useEffect(() => {
-    console.log(trips);
-  }, [trips]);
-
+  if (error) {
+    return <div>Error: {error.message}</div>;
+  }
   return (
     <>
       <main
@@ -51,10 +37,10 @@ const Home = () => {
             Learn more
           </button>
         </div>
-        <div className="flex justify-center gap-20 text-white font-bold text-2xl absolute bottom-0 m-auto left-[50%] translate-x-[-50%] z-20">
+        <div className="flex flex-1 w-[100%] justify-center gap-20 text-white font-bold text-2xl absolute bottom-0 m-auto left-[50%] translate-x-[-50%] z-20">
           <button className="flex items-center px-10 py-3 border-b-2 border-transparent hover:border-blue-600 bg-white text-gray-900 rounded-t-lg ">
             <LuCastle className="me-1" />
-            <p>Culture</p>
+            <p>For You</p>
           </button>
           <button className="flex items-center px-4 py-2 border-b-2 border-transparent hover:border-blue-600 ">
             <CiForkAndKnife className="me-1" />
@@ -77,21 +63,11 @@ const Home = () => {
         ></div>
       </main>
 
-      <section className="px-4 md:px-12 container mx-auto my-5">
-        <h2 className="text-2xl font-bold mb-6">
-          Unforgettable cultural experiences
-        </h2>
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-          {trips?.map((item) => (
-            <TripCard trip={item} />
-          ))}
-        </div>
-      </section>
+      <DisplayTrips data={data} />
       <section className="bg-blue-100 p-8">
         <SendEmail />
       </section>
 
-      {/* Recommended Activities Section */}
       <section className="py-12 px-4">
         <div className="max-w-7xl mx-auto">
           <h2 className="text-2xl font-bold text-gray-900 mb-6">
@@ -103,66 +79,12 @@ const Home = () => {
                 <h3 className="text-xl font-semibold capitalize">
                   Recommended for {category}
                 </h3>
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-                  {specificTrips
-                    .filter((trip) => trip.category === category)
-                    .map((trip) => (
-                      <div
-                        key={trip.id}
-                        className="bg-white rounded-lg overflow-hidden shadow-md hover:shadow-lg transition-shadow"
-                      >
-                        <div className="relative h-48">
-                          <img
-                            src={trip.image}
-                            alt={trip.title}
-                            className="w-full h-full object-cover"
-                          />
-                          <div className="absolute top-4 left-4 bg-emerald-600 text-white px-2 py-1 rounded-md text-sm">
-                            Top Pick
-                          </div>
-                        </div>
-                        <div className="p-4">
-                          <h3 className="text-lg font-semibold text-gray-900 mb-2 line-clamp-2">
-                            {trip.title}
-                          </h3>
-                          <div className="flex items-center gap-2 text-sm text-gray-600 mb-2">
-                            <span>{trip.duration}</span>
-                            <span>•</span>
-                            <span>Skip the line</span>
-                          </div>
-                          <div className="flex items-center gap-1 mb-2">
-                            <div className="flex text-yellow-400">
-                              {"★".repeat(Math.floor(trip.rating))}
-                              {"☆".repeat(5 - Math.floor(trip.rating))}
-                            </div>
-                            <span className="text-sm text-gray-600">
-                              ({trip.reviews})
-                            </span>
-                          </div>
-                          <div className="flex items-center justify-between">
-                            <div>
-                              <span className="text-sm text-gray-500">
-                                From
-                              </span>
-                              <span className="text-lg font-bold text-gray-900 ml-1">
-                                ${trip.price}
-                              </span>
-                            </div>
-                            <span className="text-sm text-gray-500">
-                              per person
-                            </span>
-                          </div>
-                        </div>
-                      </div>
-                    ))}
-                </div>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* FAQ Section */}
       <div className="py-12 px-4 bg-white">
         <div className="max-w-7xl mx-auto">
           <h2 className="text-2xl font-bold text-gray-900 mb-8">

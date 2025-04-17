@@ -32,7 +32,6 @@ const BookingCard = ({ trip }) => {
       toast.error("Failed to check availability. Please try again.");
     }
   };
-
   const handleBooking = async () => {
     try {
       const response = await api.post("/trips/checkavailability", {
@@ -55,7 +54,6 @@ const BookingCard = ({ trip }) => {
   return (
     <div className="lg:col-span-1">
       <div className="bg-white rounded-lg shadow-lg p-6 sticky top-8">
-        {/* Price */}
         <div className="flex justify-between items-center mb-6">
           <span className="text-2xl font-bold text-emerald-600">
             ${trip?.price}
@@ -63,9 +61,7 @@ const BookingCard = ({ trip }) => {
           <span className="text-gray-600">per person</span>
         </div>
 
-        {/* Form Controls */}
         <div className="space-y-4">
-          {/* Participants */}
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
               Participants
@@ -86,7 +82,6 @@ const BookingCard = ({ trip }) => {
             </div>
           </div>
 
-          {/* Date */}
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
               Date
@@ -108,7 +103,6 @@ const BookingCard = ({ trip }) => {
             </div>
           </div>
 
-          {/* Language */}
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
               Language
@@ -125,7 +119,6 @@ const BookingCard = ({ trip }) => {
             </select>
           </div>
 
-          {/* Check Availability */}
           <button
             onClick={handleAvailabilityCheck}
             className="w-full bg-emerald-600 text-white py-3 rounded-lg hover:bg-emerald-700 transition-colors"
@@ -134,7 +127,6 @@ const BookingCard = ({ trip }) => {
           </button>
         </div>
 
-        {/* Booking Section */}
         {isAvailable && (
           <div className="mt-6 pt-6 border-t border-gray-200 space-y-2">
             <div className="flex justify-between text-gray-600">
