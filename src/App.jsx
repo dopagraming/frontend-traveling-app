@@ -22,7 +22,7 @@ const queryClient = new QueryClient();
 
 function App() {
   return (
-    <div className="min-h-screen bg-gray-50">
+    <>
       <QueryClientProvider client={queryClient}>
         <Navbar />
         <main className="mx-auto">
@@ -84,7 +84,7 @@ function App() {
         <Footer />
         <Toaster position="top-right" />
       </QueryClientProvider>
-    </div>
+    </>
   );
 }
 export default App;

@@ -37,7 +37,7 @@ const Home = () => {
             Learn more
           </button>
         </div>
-        <div className="flex flex-1 w-[100%] justify-center gap-20 text-white font-bold text-2xl absolute bottom-0 m-auto left-[50%] translate-x-[-50%] z-20">
+        <div className="hidden xl:flex flex-1 w-[100%] justify-center gap-20 text-white font-bold text-2xl absolute bottom-0 m-auto left-[50%] translate-x-[-50%] z-20">
           <button className="flex items-center px-10 py-3 border-b-2 border-transparent hover:border-blue-600 bg-white text-gray-900 rounded-t-lg ">
             <LuCastle className="me-1" />
             <p>For You</p>
@@ -103,7 +103,6 @@ const Home = () => {
         </div>
       </div>
 
-      {/* Categories Section */}
       <div className="py-12 px-4">
         <div className="max-w-7xl mx-auto">
           {categories.map((category) => (
@@ -126,7 +125,6 @@ const Home = () => {
         </div>
       </div>
 
-      {/* Reviews Section */}
       <div className="py-12 px-4 bg-white">
         <div className="max-w-7xl mx-auto">
           <h2 className="text-2xl font-bold text-gray-900 mb-6">

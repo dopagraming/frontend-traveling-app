@@ -1,11 +1,6 @@
 import React, { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
-import {
-  Heart,
-  Palmtree as PalmTree,
-  Search,
-  ShoppingCart,
-} from "lucide-react";
+import { Heart, Palmtree as PalmTree, ShoppingCart } from "lucide-react";
 import useSearch from "../hooks/useSearch";
 import { useQuery } from "@tanstack/react-query";
 import api from "../lib/axios";
@@ -33,17 +28,17 @@ const Navbar = () => {
   });
   const path = useLocation();
   return (
-    <nav
+    <header
       className={
         path.pathname.split("/")[1] === "admin" ||
         path.pathname.split("/")[1] === "signin"
           ? `hidden`
-          : "bg-white shadow-lg "
+          : "bg-white shadow-lg px-4"
       }
     >
-      <div className="container mx-auto ">
+      <div className="container mx-auto">
         <div className="flex justify-between items-center h-16">
-          <Link to="/" className="flex items-center space-x-2">
+          <Link to="/" className="flex flex-[.1] items-center space-x-2">
             <PalmTree className="h-8 w-8 text-emerald-600" />
             <span className="text-xl font-bold text-gray-800">DopaCode</span>
           </Link>
@@ -57,7 +52,7 @@ const Navbar = () => {
             setSearch={setSearch}
             search={search}
           />
-          <div className="hidden md:flex items-center space-x-8">
+          <div className="hidden md:flex items-center space-x-8 flex-[.3] justify-end">
             <Link to="/" className="text-gray-600 hover:text-emerald-600">
               Home
             </Link>
@@ -97,7 +92,7 @@ const Navbar = () => {
           />
         )}
       </div>
-    </nav>
+    </header>
   );
 };
 
