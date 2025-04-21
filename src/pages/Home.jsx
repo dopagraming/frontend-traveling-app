@@ -10,9 +10,9 @@ import SendEmail from "../components/SendEmail";
 import DisplayTrips from "../components/DisplayTrips";
 import useGetItmes from "../hooks/useGetProducts";
 const Home = () => {
-  const { isLoading, isError, error, data } = useGetItmes("trips");
+  const { isLoading, error, data } = useGetItmes("trips");
   if (isLoading) {
-    return <div className="min-h-[100vh]">Loading...</div>;
+    return <div>Loading...</div>;
   }
 
   if (error) {
@@ -62,8 +62,12 @@ const Home = () => {
           }}
         ></div>
       </main>
-
-      <DisplayTrips data={data} />
+      <section className="px-4 md:px-12 container mx-auto my-5">
+        <h2 className="text-2xl font-bold mb-6">
+          Unforgettable cultural experiences
+        </h2>
+        <DisplayTrips data={data} />
+      </section>
       <section className="bg-blue-100 p-8">
         <SendEmail />
       </section>

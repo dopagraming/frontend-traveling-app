@@ -8,7 +8,7 @@ const RequireAuth = ({ children }) => {
   const {
     data: user,
     isLoading,
-    isError,
+    error,
   } = useQuery({
     queryKey: ["user"],
     queryFn: async () => {
@@ -16,12 +16,11 @@ const RequireAuth = ({ children }) => {
       return response.data;
     },
   });
-
   if (isLoading) {
     return <div>Loading...</div>;
   }
-  if (isError) {
-    return <div>{isError}</div>;
+  if (error) {
+    return <div>{error.message}</div>;
   }
   return <>{user ? children : navigate("/signin")}</>;
 };

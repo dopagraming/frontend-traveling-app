@@ -9,7 +9,7 @@ export default function AddTripModel({
   onClose,
   onSuccess,
   refetch,
-  product,
+  trip,
   isEditMode,
 }) {
   const {
@@ -23,16 +23,20 @@ export default function AddTripModel({
     defaultValues: {
       title: "",
       description: "",
-      itinerary: "",
+      itinerary: [""],
       duration: "",
       inclusions: [""],
       exclusions: [""],
       price: "",
       images: [""],
-      videos: "",
+      video: "",
       destination: "",
+      tripRoute: [""],
       type: "",
-      availability: [{ date: "", availableSpots: "", pricePerPerson: "" }],
+      availability: [{ date: "", availableSpots: "", spotsNumber: "" }],
+      ratingsAverage: "",
+      ratingQuantity: "",
+      tripLanguage: "",
     },
   });
 
@@ -45,12 +49,28 @@ export default function AddTripModel({
     name: "availability",
   });
   const {
+    fields: itineraryFields,
+    append: appendItinerary,
+    remove: removeItinerary,
+  } = useFieldArray({
+    control,
+    name: "itinerary",
+  });
+  const {
     fields: imageFields,
     append: appendImage,
     remove: removeImage,
   } = useFieldArray({
     control,
     name: "images",
+  });
+  const {
+    fields: tripRouteFields,
+    append: appendTripRoute,
+    remove: removeTripRoute,
+  } = useFieldArray({
+    control,
+    name: "tripRoutes",
   });
 
   const cleanData = (obj) => {
@@ -69,8 +89,8 @@ export default function AddTripModel({
   const onSubmit = async (data) => {
     const cleanedData = cleanData(data);
     try {
-      if (product && isEditMode) {
-        await api.put(`/trips/${product._id}`, cleanedData);
+      if (trip && isEditMode) {
+        await api.put(`/trips/${trip._id}`, cleanedData);
         toast.success("Trip updated successfully");
       } else {
         await api.post("/trips", cleanedData);
@@ -85,14 +105,14 @@ export default function AddTripModel({
     }
   };
   useEffect(() => {
-    if (isEditMode && product) {
-      Object.entries(product).forEach(([key, value]) => {
+    if (isEditMode && trip) {
+      Object.entries(trip).forEach(([key, value]) => {
         setValue(key, value);
       });
     } else {
       reset();
     }
-  }, [product, isEditMode, setValue, reset]);
+  }, [trip, isEditMode, setValue, reset]);
   return (
     <Transition.Root show={isOpen} as={Fragment}>
       <Dialog as="div" className="relative z-50" onClose={onClose}>
@@ -179,65 +199,26 @@ export default function AddTripModel({
                           </p>
                         )}
                       </div>
-
-                      <div className="grid grid-cols-2 gap-4">
-                        <div>
-                          <label
-                            htmlFor="quantity"
-                            className="block text-sm font-medium text-gray-700"
-                          >
-                            itinerary
-                          </label>
-                          <input
-                            type="text"
-                            {...register("itinerary")}
-                            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                          />
-                          {errors.quantity && (
-                            <p className="mt-1 text-sm text-red-600">
-                              {errors.quantity.message}
-                            </p>
-                          )}
-                        </div>
-
-                        <div>
-                          <label
-                            htmlFor="duration"
-                            className="block text-sm font-medium text-gray-700"
-                          >
-                            duration
-                          </label>
-                          <input
-                            type="text"
-                            {...register("duration")}
-                            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                          />
-                        </div>
-                      </div>
-
-                      <div className="grid grid-cols-2 gap-4">
-                        <div>
-                          <label
-                            htmlFor="price"
-                            className="block text-sm font-medium text-gray-700"
-                          >
-                            Price
-                          </label>
-                          <input
-                            type="number"
-                            step="0.01"
-                            {...register("price", {
-                              required: "Price is required",
-                              valueAsNumber: true,
-                            })}
-                            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                          />
-                          {errors.price && (
-                            <p className="mt-1 text-sm text-red-600">
-                              {errors.price.message}
-                            </p>
-                          )}
-                        </div>
+                      <div>
+                        <label
+                          htmlFor="price"
+                          className="block text-sm font-medium text-gray-700"
+                        >
+                          Price
+                        </label>
+                        <input
+                          type="number"
+                          {...register("price", {
+                            required: "Price is required",
+                            valueAsNumber: [true, "price must be number"],
+                          })}
+                          className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                        />
+                        {errors.price && (
+                          <p className="mt-1 text-sm text-red-600">
+                            {errors.price.message}
+                          </p>
+                        )}
                       </div>
 
                       <div>
@@ -248,45 +229,57 @@ export default function AddTripModel({
                           video
                         </label>
                         <input
-                          type="text"
+                          type="file"
                           {...register("video")}
                           className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                         />
                       </div>
 
-                      <div>
-                        <label>Availability</label>
-                        {availabilityFields?.map((field, index) => (
+                      <div className="mb-6">
+                        <label className="block text-lg font-semibold mb-3 text-gray-700">
+                          Availability
+                        </label>
+
+                        {availabilityFields.map((field, index) => (
                           <div
                             key={field.id}
-                            className="grid grid-cols-3 gap-2"
+                            className="grid grid-cols-3 gap-4 mb-4 bg-gray-50 p-4 rounded-lg shadow-sm"
                           >
                             <input
                               type="date"
                               {...register(`availability.${index}.date`)}
+                              className="border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-emerald-500"
                             />
+
                             <input
                               type="number"
                               {...register(
                                 `availability.${index}.availableSpots`
                               )}
                               placeholder="Spots"
+                              className="border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-emerald-500"
                             />
-                            <input
-                              type="number"
-                              {...register(
-                                `availability.${index}.pricePerPerson`
-                              )}
-                              placeholder="Price/Person"
-                            />
-                            <button
-                              type="button"
-                              onClick={() => removeAvailability(index)}
-                            >
-                              X
-                            </button>
+
+                            <div className="flex items-center gap-2">
+                              <input
+                                type="number"
+                                {...register(
+                                  `availability.${index}.spotsNumber`
+                                )}
+                                placeholder="Spots Number"
+                                className="border border-gray-300 rounded-md p-2 w-full focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                              />
+                              <button
+                                type="button"
+                                onClick={() => removeAvailability(index)}
+                                className="bg-red-500 text-white px-3 py-1 rounded-md hover:bg-red-600"
+                              >
+                                X
+                              </button>
+                            </div>
                           </div>
                         ))}
+
                         <button
                           type="button"
                           onClick={() =>
@@ -296,8 +289,118 @@ export default function AddTripModel({
                               pricePerPerson: "",
                             })
                           }
+                          className="bg-emerald-600 text-white px-4 py-2 rounded-md hover:bg-emerald-700 transition"
                         >
                           + Add Availability
+                        </button>
+                      </div>
+
+                      <div className="mb-6">
+                        <label className="block text-lg font-semibold mb-3 text-gray-700">
+                          Trip Route
+                        </label>
+
+                        {tripRouteFields.map((field, index) => (
+                          <div
+                            key={field.id}
+                            className="grid grid-cols-3 gap-4 mb-4 bg-gray-50 p-4 rounded-lg shadow-sm"
+                          >
+                            <input
+                              type="text"
+                              placeholder="Day"
+                              {...register(`tripRoute.${index}.location`)}
+                              className="border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                            />
+                            <input
+                              type="text"
+                              placeholder="duration"
+                              {...register(`tripRoute.${index}.duration`)}
+                              className="border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                            />
+                            <input
+                              type="text"
+                              placeholder="activity"
+                              {...register(`tripRoute.${index}.activity`)}
+                              className="border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                            />
+
+                            <div className="col-span-2 flex gap-2">
+                              <input
+                                type="text"
+                                placeholder="icon"
+                                {...register(`tripRoute.${index}.icon`)}
+                                className="border border-gray-300 rounded-md p-2 w-full focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                              />
+                              <button
+                                type="button"
+                                onClick={() => removeTripRoute(index)}
+                                className="bg-red-500 text-white px-3 py-1 rounded-md hover:bg-red-600"
+                              >
+                                X
+                              </button>
+                            </div>
+                          </div>
+                        ))}
+
+                        <button
+                          type="button"
+                          onClick={() =>
+                            appendTripRoute({
+                              day: "",
+                              description: "",
+                            })
+                          }
+                          className="bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-700 transition"
+                        >
+                          + Add Route
+                        </button>
+                      </div>
+                      <div className="mb-6">
+                        <label className="block text-lg font-semibold mb-3 text-gray-700">
+                          Itinerary
+                        </label>
+
+                        {itineraryFields.map((field, index) => (
+                          <div
+                            key={field.id}
+                            className="grid grid-cols-3 gap-4 mb-4 bg-gray-50 p-4 rounded-lg shadow-sm"
+                          >
+                            <input
+                              type="text"
+                              placeholder="Day"
+                              {...register(`itinerary.${index}.day`)}
+                              className="border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                            />
+
+                            <div className="col-span-2 flex gap-2">
+                              <input
+                                type="text"
+                                placeholder="Description"
+                                {...register(`itinerary.${index}.description`)}
+                                className="border border-gray-300 rounded-md p-2 w-full focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                              />
+                              <button
+                                type="button"
+                                onClick={() => removeItinerary(index)}
+                                className="bg-red-500 text-white px-3 py-1 rounded-md hover:bg-red-600"
+                              >
+                                X
+                              </button>
+                            </div>
+                          </div>
+                        ))}
+
+                        <button
+                          type="button"
+                          onClick={() =>
+                            appendItinerary({
+                              day: "",
+                              description: "",
+                            })
+                          }
+                          className="bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-700 transition"
+                        >
+                          + Add Itinerary
                         </button>
                       </div>
 
@@ -317,38 +420,77 @@ export default function AddTripModel({
                         />
                       </div>
 
-                      <div className="grid grid-cols-2 gap-4">
-                        <div>
-                          <label
-                            htmlFor="destination"
-                            className="block text-sm font-medium text-gray-700"
-                          >
-                            destination
-                          </label>
-                          <input
-                            type="text"
-                            {...register("destination")}
-                            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                          />
-                        </div>
+                      <div>
+                        <label
+                          htmlFor="destination"
+                          className="block text-sm font-medium text-gray-700"
+                        >
+                          destination
+                        </label>
+                        <input
+                          type="text"
+                          {...register("destination")}
+                          className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                        />
+                      </div>
 
-                        <div>
-                          <label>Images</label>
-                          {imageFields?.map((field, index) => (
-                            <div key={field.id} className="flex gap-2">
-                              <input {...register(`images.${index}`)} />
-                              <button
-                                type="button"
-                                onClick={() => removeImage(index)}
-                              >
-                                X
-                              </button>
-                            </div>
-                          ))}
-                          <button type="button" onClick={() => appendImage("")}>
-                            + Add
-                          </button>
-                        </div>
+                      <div>
+                        <label
+                          htmlFor="type"
+                          className="block text-sm font-medium text-gray-700"
+                        >
+                          Trip type
+                        </label>
+                        <input
+                          type="text"
+                          {...register("type")}
+                          className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                        />
+                      </div>
+
+                      <div>
+                        <label
+                          htmlFor="tripLanguage"
+                          className="block text-sm font-medium text-gray-700"
+                        >
+                          trip Language
+                        </label>
+                        <input
+                          type="text"
+                          {...register("tripLanguage")}
+                          className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                        />
+                      </div>
+                      <div>
+                        <label
+                          htmlFor="duration"
+                          className="block text-sm font-medium text-gray-700"
+                        >
+                          duration
+                        </label>
+                        <input
+                          type="text"
+                          {...register("duration")}
+                          className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                        />
+                      </div>
+
+                      <div>
+                        <label>Images</label>
+                        {imageFields?.map((field, index) => (
+                          <div key={field.id} className="flex gap-2">
+                            <input {...register(`images.${index}`)} />
+                            <button
+                              type="button"
+                              onClick={() => removeImage(index)}
+                            >
+                              X
+                            </button>
+                          </div>
+                        ))}
+                        <button type="button" onClick={() => appendImage("")}>
+                          + Add
+                        </button>
                       </div>
                     </div>
                   </div>

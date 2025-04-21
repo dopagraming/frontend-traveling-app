@@ -25,7 +25,7 @@ function App() {
     <>
       <QueryClientProvider client={queryClient}>
         <Navbar />
-        <main className="mx-auto">
+        <main className="mx-auto min-h-[calc(100vh-64px)]">
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/trips" element={<Trips />} />

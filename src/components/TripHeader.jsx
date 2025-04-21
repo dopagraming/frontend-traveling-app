@@ -1,12 +1,15 @@
 import { MapPin, Clock, Heart, Share2, Star } from "lucide-react";
 import { useState } from "react";
 import toast from "react-hot-toast";
+import { useDispatch } from "react-redux";
+import { addToWishlist } from "../rtk/features/wishlistSlice";
 
 const TripHeader = ({ trip }) => {
-  const [isWishlisted, setIsWishlisted] = useState(false);
-
-  const toggleWishlist = () => {
-    setIsWishlisted(!isWishlisted);
+  const [isWishlisted, setIsWishlist] = useState();
+  const dispatch = useDispatch();
+  const handleAddToWishlist = (e) => {
+    dispatch(addToWishlist(e));
+    setIsWishlist(true);
     toast.success(isWishlisted ? "Removed from wishlist" : "Added to wishlist");
   };
 
@@ -45,7 +48,7 @@ const TripHeader = ({ trip }) => {
       </div>
       <div className="flex items-center space-x-4">
         <button
-          onClick={toggleWishlist}
+          onClick={() => handleAddToWishlist(trip)}
           className={`p-2 rounded-full ${
             isWishlisted
               ? "bg-red-100 text-red-600"

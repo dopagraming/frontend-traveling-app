@@ -10,14 +10,18 @@ export const cartSlice = createSlice({
   initialState,
   reducers: {
     addToCart: (state, action) => {
-      return {
-        cart: [...state.cart, action.payload],
-      };
+      const newCart = [...state.cart, action.payload]
+      localStorage.setItem("cart", JSON.stringify(newCart))
+      state.cart = newCart
     },
+    removeFromCart: (state, action) => {
+      const newCart = state.wishlist.filter((e) => e._id !== action.payload);
+      localStorage.setItem("wishlist", JSON.stringify(newCart));
+      state.wishlist = newCart;
+    }
   },
 });
 
-// Action creators are generated for each case reducer function
-export const { addToCart } = cartSlice.actions;
+export const { addToCart, removeFromCart } = cartSlice.actions;
 
 export default cartSlice;

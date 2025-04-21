@@ -50,31 +50,52 @@ export default function Trips() {
               <thead>
                 <tr>
                   <th className="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-0">
-                    Name
+                    title
                   </th>
                   <th className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
-                    Price
+                    price
                   </th>
                   <th className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
-                    Itinerary
+                    description
                   </th>
                   <th className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
-                    Duration
+                    itinerary
                   </th>
                   <th className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
-                    Images
+                    duration
                   </th>
                   <th className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
-                    Videos
+                    images
                   </th>
                   <th className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
-                    Destination
+                    imageCover
                   </th>
                   <th className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
-                    Availability
+                    video
                   </th>
                   <th className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
-                    Description
+                    destination
+                  </th>
+                  <th className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
+                    type
+                  </th>
+                  <th className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
+                    tripRoute
+                  </th>
+                  <th className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
+                    availability
+                  </th>
+                  <th className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
+                    reviews
+                  </th>
+                  <th className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
+                    ratingsAverage
+                  </th>
+                  <th className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
+                    ratingQuantity
+                  </th>
+                  <th className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
+                    tripLanguage
                   </th>
                   <th className="relative py-3.5 pl-3 pr-4 sm:pr-0">
                     <span className="sr-only">Actions</span>
@@ -82,51 +103,95 @@ export default function Trips() {
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-200">
-                {data?.map((product) => (
-                  <tr key={product._id}>
+                {data?.map((trip) => (
+                  <tr key={trip._id}>
                     <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-0">
-                      {product?.title}
+                      {trip?.title}
                     </td>
                     <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                      {product?.price}
+                      {trip?.price}
                     </td>
                     <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                      {product?.itinerary}
+                      {trip?.description}
                     </td>
                     <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                      {product?.duration}
-                    </td>
-                    <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                      {product?.images?.length}
-                    </td>
-                    <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                      {product?.videos?.length}
-                    </td>
-                    <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                      {product?.destination}
-                    </td>
-                    <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                      {product?.availability?.map((a, index) => (
-                        <div key={index}>
-                          <p>{new Date(a.date).toLocaleDateString()}</p>
-                          <p>الأماكن: {a.availableSpots}</p>
-                          <p>السعر: {a.pricePerPerson}</p>
+                      {trip?.itinerary?.map((a) => (
+                        <div key={a._id}>
+                          <p>day: {a?.day}</p>
+                          <p>description: {a?.description}</p>
+                          <hr />
                         </div>
                       ))}
                     </td>
                     <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                      {product?.description?.slice(0, 20)}...
+                      {trip?.duration}
+                    </td>
+                    <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                      {trip?.images?.length}
+                    </td>
+                    <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                      <img src={trip?.imageCover} alt={trip?.title} />
+                    </td>
+                    <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                      {trip?.video}
+                    </td>
+                    <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                      {trip?.destination}
+                    </td>
+                    <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                      {trip?.type}
+                    </td>
+                    <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                      {trip?.tripRoute?.map((a) => (
+                        <div key={a._id}>
+                          <p>location: {a?.location}</p>
+                          <p>duration: {a?.duration}</p>
+                          <p>activity: {a?.activity}</p>
+                          <p>icon: {a?.icon}</p>
+                          <hr />
+                        </div>
+                      ))}
+                    </td>
+                    <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                      {trip?.availability?.map((a) => (
+                        <div key={a._id}>
+                          <p>{new Date(a?.date).toLocaleDateString()}</p>
+                          <p>available spots: {a.availableSpots}</p>
+                          <p>spots number: {a.spotsNumber}</p>
+                          <hr />
+                        </div>
+                      ))}
+                    </td>
+                    <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                      {trip?.reviews?.map((a) => (
+                        <div key={a._id}>
+                          <p>{new Date(a?.date).toLocaleDateString()}</p>
+                          <p>user: {a?.user}</p>
+                          <p>rating: {a?.spotsNumber}</p>
+                          <p>comment: {a?.spotsNumber}</p>
+                          <hr />
+                        </div>
+                      ))}
+                    </td>
+                    <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                      {trip?.ratingsAverage}
+                    </td>
+                    <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                      {trip?.ratingQuantity}
+                    </td>
+                    <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                      {trip?.tripLanguage}
                     </td>
                     <td className="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-0">
                       <button
                         className="text-indigo-600 hover:text-indigo-900 mr-4"
-                        onClick={() => handleEdit(product)}
+                        onClick={() => handleEdit(trip)}
                       >
                         Edit
                       </button>
                       <button
                         className="text-red-600 hover:text-red-900"
-                        onClick={() => handleDelete(product)}
+                        onClick={() => handleDelete(trip)}
                       >
                         Delete
                       </button>
@@ -143,7 +208,7 @@ export default function Trips() {
         isOpen={isDeleteModalOpen}
         onClose={onClose}
         refetch={refetch}
-        message="Are you sure you want to delete this product? This action cannot be undone."
+        message="Are you sure you want to delete this trip? This action cannot be undone."
         model={"trips"}
         doc={selectedItem}
       />
@@ -152,7 +217,7 @@ export default function Trips() {
         onClose={onClose}
         refetch={refetch}
         isEditMode={isEditMode}
-        product={selectedItem}
+        trip={selectedItem}
       />
     </div>
   );
