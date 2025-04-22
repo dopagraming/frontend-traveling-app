@@ -4,6 +4,7 @@ import { useFieldArray, useForm } from "react-hook-form";
 import { toast } from "react-hot-toast";
 import api from "../../../lib/axios";
 import { DisplayErrors } from "../../../utils";
+import useGetItmes from "../../../hooks/useGetProducts";
 export default function AddTripModel({
   isOpen,
   onClose,
@@ -12,6 +13,7 @@ export default function AddTripModel({
   trip,
   isEditMode,
 }) {
+  const { data } = useGetItmes("categories");
   const {
     register,
     handleSubmit,
@@ -167,6 +169,31 @@ export default function AddTripModel({
                           })}
                           className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                         />
+                        {errors.title && (
+                          <p className="mt-1 text-sm text-red-600">
+                            {errors.title.message}
+                          </p>
+                        )}
+                      </div>
+                      <div>
+                        <label
+                          htmlFor="title"
+                          className="block text-sm font-medium text-gray-700"
+                        >
+                          Category
+                        </label>
+                        <select
+                          className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                          {...register("category", {
+                            required: "category is required",
+                          })}
+                        >
+                          {data.map((category) => (
+                            <option value={category._id}>
+                              {category.title}
+                            </option>
+                          ))}
+                        </select>
                         {errors.title && (
                           <p className="mt-1 text-sm text-red-600">
                             {errors.title.message}

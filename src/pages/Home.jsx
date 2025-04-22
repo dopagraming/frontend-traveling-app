@@ -1,16 +1,34 @@
-import React, { useEffect, useState } from "react";
-import TripCard from "../components/TripCard";
-import { attractions, categories, faqs, specificTrips } from "../data/trips";
+import { attractions, faqs, specificTrips } from "../data/trips";
 import heroImg from "../assests/images/hero.webp";
-import { LuCastle } from "react-icons/lu";
-import { CiForkAndKnife } from "react-icons/ci";
-import { PiMountainsLight } from "react-icons/pi";
-import { MdOutlineSportsHandball } from "react-icons/md";
 import SendEmail from "../components/SendEmail";
 import DisplayTrips from "../components/DisplayTrips";
 import useGetItmes from "../hooks/useGetProducts";
+import { useEffect, useState } from "react";
+import { IoIosArrowForward, IoIosArrowBack } from "react-icons/io";
+import api from "../lib/axios";
+import CategoriesSlider from "../components/CategoriesSlider";
+
 const Home = () => {
-  const { isLoading, error, data } = useGetItmes("trips");
+  const { isLoading, error, data: categories } = useGetItmes("categories");
+  const [trips, setTrips] = useState();
+  const [type, setType] = useState();
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        if (type) {
+          const res = await api.get(`/trips?category=${type}`);
+          setTrips(res.data.data);
+        } else {
+          const res = await api.get(`/trips`);
+          setTrips(res.data.data);
+        }
+      } catch (err) {
+        console.error(err);
+      }
+    };
+    fetchData();
+  }, [type]);
+
   if (isLoading) {
     return <div>Loading...</div>;
   }
@@ -21,7 +39,7 @@ const Home = () => {
   return (
     <>
       <main
-        className="h-[80vh] bg-cover bg-center text-white flex items-center px-8 relative"
+        className="h-[80vh] bg-cover bg-center text-white flex items-center px-8 relative overflow-hidden"
         style={{
           backgroundImage: `url(${heroImg})`,
         }}
@@ -37,24 +55,7 @@ const Home = () => {
             Learn more
           </button>
         </div>
-        <div className="hidden xl:flex flex-1 w-[100%] justify-center gap-20 text-white font-bold text-2xl absolute bottom-0 m-auto left-[50%] translate-x-[-50%] z-20">
-          <button className="flex items-center px-10 py-3 border-b-2 border-transparent hover:border-blue-600 bg-white text-gray-900 rounded-t-lg ">
-            <LuCastle className="me-1" />
-            <p>For You</p>
-          </button>
-          <button className="flex items-center px-4 py-2 border-b-2 border-transparent hover:border-blue-600 ">
-            <CiForkAndKnife className="me-1" />
-            <p>Food</p>
-          </button>
-          <button className="flex items-center px-4 py-2 border-b-2 border-transparent hover:border-blue-600 ">
-            <PiMountainsLight className="me-1" />
-            <p>Nature</p>
-          </button>
-          <button className="flex items-center px-4 py-2 border-b-2 border-transparent hover:border-blue-600 ">
-            <MdOutlineSportsHandball className="me-1" />
-            <p>Sports</p>
-          </button>
-        </div>
+        <CategoriesSlider setType={setType} categories={categories} />
         <div
           className="overlay absolute w-full h-full left-0 top-0"
           style={{
@@ -66,7 +67,7 @@ const Home = () => {
         <h2 className="text-2xl font-bold mb-6">
           Unforgettable cultural experiences
         </h2>
-        <DisplayTrips data={data} />
+        <DisplayTrips data={trips} />
       </section>
       <section className="bg-blue-100 p-8">
         <SendEmail />
@@ -95,7 +96,7 @@ const Home = () => {
             Frequently asked questions about Hurghada
           </h2>
           <div className="space-y-6">
-            {faqs.map((faq, index) => (
+            {faqs?.map((faq, index) => (
               <div key={index} className="border-b border-gray-200 pb-6">
                 <h3 className="text-lg font-semibold text-gray-900 mb-2">
                   {faq.question}
@@ -109,13 +110,13 @@ const Home = () => {
 
       <div className="py-12 px-4">
         <div className="max-w-7xl mx-auto">
-          {categories.map((category) => (
-            <div key={category} className="mb-8">
+          {categories?.map((category) => (
+            <div key={category._id} className="mb-8">
               <h2 className="text-xl font-bold text-gray-900 mb-4">
-                {category}
+                {category.title}
               </h2>
               <div className="flex flex-wrap gap-2">
-                {attractions[category].map((item, index) => (
+                {attractions[category]?.map((item, index) => (
                   <button
                     key={index}
                     className="px-4 py-2 bg-white border border-gray-300 rounded-full text-sm hover:bg-gray-50"

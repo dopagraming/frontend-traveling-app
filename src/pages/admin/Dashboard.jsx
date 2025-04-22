@@ -18,6 +18,22 @@ const AdminDashboard = () => {
         </h1>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <Link to="/admin/categories" className="block">
+            <div className="bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition-shadow">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center">
+                  <Calendar className="h-8 w-8 text-emerald-600" />
+                  <div className="ml-4">
+                    <h3 className="text-lg font-semibold text-gray-900">
+                      Categories
+                    </h3>
+                    <p className="text-sm text-gray-500">Manage reservations</p>
+                  </div>
+                </div>
+                <ChevronRight className="h-5 w-5 text-gray-400" />
+              </div>
+            </div>
+          </Link>
           <Link to="/admin/bookings" className="block">
             <div className="bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition-shadow">
               <div className="flex items-center justify-between">

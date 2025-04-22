@@ -18,6 +18,7 @@ import Payments from "./pages/admin/pages/Payments";
 import RequireAuth from "./pages/admin/RequireAuth";
 import SignIn from "./pages/auth/SignIn";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import ManageCategories from "./pages/admin/pages/ManageCategories";
 const queryClient = new QueryClient();
 
 function App() {
@@ -42,6 +43,14 @@ function App() {
               element={
                 <RequireAuth>
                   <AdminDashboard />
+                </RequireAuth>
+              }
+            />
+            <Route
+              path="/admin/categories"
+              element={
+                <RequireAuth>
+                  <ManageCategories />
                 </RequireAuth>
               }
             />
