@@ -26,7 +26,7 @@ export default function Trips() {
 
   return (
     <div className="container m-auto min-h-[100vh] py-5">
-      <div className="sm:flex sm:items-center ">
+      <div className="sm:flex sm:items-center px-4 sm:px-0 ">
         <div className="sm:flex-auto flex items-center">
           <Link className="cursor-pointer" to="/admin">
             X
@@ -45,7 +45,7 @@ export default function Trips() {
       </div>
       <div className="mt-8 flow-root">
         <div className="-mx-4 -my-2 overflow-x-auto overflow-y-auto max-h-[80vh] sm:-mx-6 lg:-mx-8">
-          <div className="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8">
+          <div className="inline-block min-w-full py-2 align-middle px-4 sm:px-6 lg:px-8">
             <table className="min-w-full divide-y divide-gray-300">
               <thead>
                 <tr>

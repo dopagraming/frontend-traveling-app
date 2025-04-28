@@ -4,7 +4,6 @@ import SendEmail from "../components/SendEmail";
 import DisplayTrips from "../components/DisplayTrips";
 import useGetItmes from "../hooks/useGetProducts";
 import { useEffect, useState } from "react";
-import { IoIosArrowForward, IoIosArrowBack } from "react-icons/io";
 import api from "../lib/axios";
 import CategoriesSlider from "../components/CategoriesSlider";
 
