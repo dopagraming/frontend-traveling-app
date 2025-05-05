@@ -2,14 +2,6 @@ import React, { useState } from "react";
 
 const SendEmail = () => {
   const [email, setEmail] = useState("");
-  const [selectedCategory, setSelectedCategory] = useState("all");
-
-  // const handleSubscribe = (e) => {
-  //   e.preventDefault();
-  //   // Handle newsletter subscription
-  //   console.log("Subscribed:", email);
-  //   setEmail("");
-  // };
   return (
     <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center gap-8">
       <div className="flex-1">
@@ -27,7 +19,7 @@ const SendEmail = () => {
           Get personalized travel inspiration, the latest travel hacks, and
           exclusive deals straight to your inbox.
         </p>
-        <form className="flex gap-2">
+        <form className="flex gap-2 flex-col md:flex-row">
           <input
             type="email"
             value={email}

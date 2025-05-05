@@ -71,7 +71,7 @@ const Footer = () => {
 
           <div>
             <h3 className="text-xl font-semibold mb-4">Contact Us</h3>
-            <ul className="space-y-2">
+            <ul className="space-y-2 max-w-full">
               <li className="flex items-center space-x-2">
                 <MapPin size={16} />
                 <span>123 Adventure St, Explorer City</span>
@@ -82,12 +82,11 @@ const Footer = () => {
               </li>
               <li className="flex items-center space-x-2">
                 <Mail size={16} />
-                <span>blog@abdelrahmanzourob.com</span>
+                <span className="break-all">blog@abdelrahmanzourob.com</span>
               </li>
             </ul>
           </div>
 
-          {/* Newsletter */}
           <div>
             <h3 className="text-xl font-semibold mb-4">Newsletter</h3>
             <p className="text-gray-400 mb-4">
