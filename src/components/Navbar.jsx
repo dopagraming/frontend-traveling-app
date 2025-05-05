@@ -18,6 +18,7 @@ const Navbar = () => {
     queryFn: async () => {
       const res = await api.post("/trips/search-trips", {
         keyword: searched,
+        date: searchDate,
       });
       console.log(res.data);
       return res.data;

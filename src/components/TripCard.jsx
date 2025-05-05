@@ -65,6 +65,10 @@ const TripCard = ({ trip }) => {
               ({trip.ratingQuantity})
             </span>
           </div>
+          <div className="flex justify-between mb-1">
+            <p className="text-sm">Number of travelers 20</p>
+            <p className="text-sm">(8 availabile)</p>
+          </div>
           <div className="flex items-center justify-between">
             <div>
               <span className="text-sm text-gray-500">From</span>

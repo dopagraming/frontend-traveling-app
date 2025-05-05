@@ -11,10 +11,17 @@ const Home = () => {
   const { isLoading, error, data: categories } = useGetItmes("categories");
   const [trips, setTrips] = useState();
   const [type, setType] = useState();
+  const [sort, setSort] = useState("");
   useEffect(() => {
     const fetchData = async () => {
       try {
-        if (type) {
+        if (type && sort) {
+          const res = await api.get(`/trips?category=${type}&sort=${sort}`);
+          setTrips(res.data.data);
+        } else if (sort) {
+          const res = await api.get(`/trips?sort=${sort}`);
+          setTrips(res.data.data);
+        } else if (type) {
           const res = await api.get(`/trips?category=${type}`);
           setTrips(res.data.data);
         } else {
@@ -26,7 +33,7 @@ const Home = () => {
       }
     };
     fetchData();
-  }, [type]);
+  }, [type, sort]);
 
   if (isLoading) {
     return <div>Loading...</div>;
@@ -63,9 +70,20 @@ const Home = () => {
         ></div>
       </main>
       <section className="px-4 md:px-12 container mx-auto my-5">
-        <h2 className="text-2xl font-bold mb-6">
-          Unforgettable cultural experiences
-        </h2>
+        <div className="flex justify-between align-center mb-5">
+          <h2 className="text-2xl font-bold">Day trips</h2>
+          <select
+            onChange={(e) => {
+              setSort(e.target.value);
+            }}
+            className="w-full md:w-60 rounded-xl border border-gray-300 bg-white p-3 text-sm shadow-sm focus:border-emerald-500 focus:ring-emerald-500 focus:outline-none transition duration-200"
+          >
+            <option value="">Recommended</option>
+            <option value="price">Price - Low To High</option>
+            <option value="-price">Price - High To Low</option>
+            <option value="-ratingsAverage">Rating</option>
+          </select>
+        </div>
         <DisplayTrips data={trips} />
       </section>
       <section className="bg-blue-100 p-8">
