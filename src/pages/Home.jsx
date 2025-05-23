@@ -1,4 +1,4 @@
-import { attractions, faqs, specificTrips } from "../data/trips";
+import { attractions, faqs } from "../data/trips";
 import heroImg from "../assests/images/hero.webp";
 import SendEmail from "../components/SendEmail";
 import DisplayTrips from "../components/DisplayTrips";
@@ -6,34 +6,46 @@ import useGetItmes from "../hooks/useGetProducts";
 import { useEffect, useState } from "react";
 import api from "../lib/axios";
 import CategoriesSlider from "../components/CategoriesSlider";
+import FilterPanel from "../components/filters/FilterPanel";
 
 const Home = () => {
   const { isLoading, error, data: categories } = useGetItmes("categories");
   const [trips, setTrips] = useState();
   const [type, setType] = useState();
-  const [sort, setSort] = useState("");
+
+  const handleApplyFilters = async (filters) => {
+    try {
+      const params = new URLSearchParams();
+
+      if (filters.sort) params.append("sort", filters.sort);
+      if (filters.categories) params.append("category", filters.categories);
+      if (filters.priceMin) params.append("price[gte]", filters.priceMin);
+      if (filters.priceMax) params.append("price[lte]", filters.priceMax);
+      if (filters.language && filters.language !== "en") {
+        params.append("language", filters.language);
+      }
+      if (filters.city) params.append("city", filters.city);
+
+      const queryString = params.toString() ? `?${params.toString()}` : "";
+      console.log(`/trips${queryString}`);
+      const res = await api.get(`/trips${queryString}`);
+      setTrips(res.data.data);
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
   useEffect(() => {
-    const fetchData = async () => {
+    const fetchInitialData = async () => {
       try {
-        if (type && sort) {
-          const res = await api.get(`/trips?category=${type}&sort=${sort}`);
-          setTrips(res.data.data);
-        } else if (sort) {
-          const res = await api.get(`/trips?sort=${sort}`);
-          setTrips(res.data.data);
-        } else if (type) {
-          const res = await api.get(`/trips?category=${type}`);
-          setTrips(res.data.data);
-        } else {
-          const res = await api.get(`/trips`);
-          setTrips(res.data.data);
-        }
+        const res = await api.get("/trips");
+        setTrips(res.data.data);
       } catch (err) {
         console.error(err);
       }
     };
-    fetchData();
-  }, [type, sort]);
+    fetchInitialData();
+  }, []);
 
   if (isLoading) {
     return <div>Loading...</div>;
@@ -42,6 +54,7 @@ const Home = () => {
   if (error) {
     return <div>Error: {error.message}</div>;
   }
+
   return (
     <>
       <main
@@ -69,23 +82,22 @@ const Home = () => {
           }}
         ></div>
       </main>
+
       <section className="px-4 md:px-12 container mx-auto my-5">
-        <div className="flex justify-between align-center mb-5">
-          <h2 className="text-2xl font-bold">Day trips</h2>
-          <select
-            onChange={(e) => {
-              setSort(e.target.value);
-            }}
-            className="w-full md:w-60 rounded-xl border border-gray-300 bg-white p-3 text-sm shadow-sm focus:border-emerald-500 focus:ring-emerald-500 focus:outline-none transition duration-200"
-          >
-            <option value="">Recommended</option>
-            <option value="price">Price - Low To High</option>
-            <option value="-price">Price - High To Low</option>
-            <option value="-ratingsAverage">Rating</option>
-          </select>
+        <div className="flex flex-col lg:flex-row gap-6">
+          <div className="w-full md:w-72">
+            <div className="lg:sticky lg:top-4">
+              <FilterPanel onApplyFilters={handleApplyFilters} />
+            </div>
+          </div>
+
+          <div className="flex-1">
+            <h2 className="text-2xl font-bold mb-5">Day trips</h2>
+            <DisplayTrips data={trips} />
+          </div>
         </div>
-        <DisplayTrips data={trips} />
       </section>
+
       <section className="bg-blue-100 p-8">
         <SendEmail />
       </section>
