@@ -30,7 +30,9 @@ const signUpSchema = z
 const SignUp = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { loading, error, isAuthenticated } = useSelector((state) => state.user);
+  const { loading, error, isAuthenticated } = useSelector(
+    (state) => state.user
+  );
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
@@ -64,12 +66,13 @@ const SignUp = () => {
         password: data.password,
         passwordConfirm: data.passwordConfirm,
       });
-      
+
       localStorage.setItem("token", res.data.token);
       dispatch(signupSuccess(res.data.user));
       toast.success("Account created successfully!");
       navigate("/");
     } catch (error) {
+      console.log(error);
       const errorMessage = error.response?.data?.message || "Signup failed";
       dispatch(signupFailure(errorMessage));
       DisplayErrors(error);
@@ -77,10 +80,10 @@ const SignUp = () => {
   };
 
   return (
-    <div className="min-h-screen flex bg-soft-sand">
+    <div className="min-h-screen flex bg-soft-sand ">
       <div className="w-full lg:w-1/2 flex items-center justify-center p-8">
         <div className="max-w-md w-full space-y-8">
-          <div className="text-center">
+          <div className="text-center mt-10">
             <div className="flex justify-center mb-4">
               <div className="p-2 bg-natural-blue rounded-lg">
                 <Compass className="h-8 w-8 text-white" />
@@ -152,7 +155,11 @@ const SignUp = () => {
                   onClick={() => setShowPassword(!showPassword)}
                   className="absolute right-3 top-1/2 transform -translate-y-1/2 text-sea-blue hover:text-sea-blue-dark"
                 >
-                  {showPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
+                  {showPassword ? (
+                    <EyeOff className="h-5 w-5" />
+                  ) : (
+                    <Eye className="h-5 w-5" />
+                  )}
                 </button>
               </div>
               {errors.password && (
@@ -179,7 +186,11 @@ const SignUp = () => {
                   onClick={() => setShowConfirmPassword(!showConfirmPassword)}
                   className="absolute right-3 top-1/2 transform -translate-y-1/2 text-sea-blue hover:text-sea-blue-dark"
                 >
-                  {showConfirmPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
+                  {showConfirmPassword ? (
+                    <EyeOff className="h-5 w-5" />
+                  ) : (
+                    <Eye className="h-5 w-5" />
+                  )}
                 </button>
               </div>
               {errors.passwordConfirm && (
@@ -197,11 +208,17 @@ const SignUp = () => {
               />
               <label className="ml-2 block text-sm text-deep-charcoal">
                 I agree to the{" "}
-                <Link to="/terms" className="text-sea-blue hover:text-sea-blue-dark">
+                <Link
+                  to="/terms"
+                  className="text-sea-blue hover:text-sea-blue-dark"
+                >
                   Terms of Service
                 </Link>{" "}
                 and{" "}
-                <Link to="/privacy" className="text-sea-blue hover:text-sea-blue-dark">
+                <Link
+                  to="/privacy"
+                  className="text-sea-blue hover:text-sea-blue-dark"
+                >
                   Privacy Policy
                 </Link>
               </label>

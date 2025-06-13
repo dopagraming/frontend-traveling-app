@@ -23,7 +23,7 @@ const SignIn = () => {
   } = useForm({
     resolver: zodResolver(signInSchema),
   });
-  
+
   const onSubmit = async (data) => {
     try {
       const res = await api.post("/auth/login", {
@@ -38,7 +38,7 @@ const SignIn = () => {
     }
   };
   return (
-    <div className="min-h-[100vh] flex">
+    <div className="min-h-[100vh] flex mt-20">
       <div className="w-full lg:w-1/2 flex items-center justify-center p-8">
         <div className="max-w-md w-full space-y-8">
           <div className="text-center">

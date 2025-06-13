@@ -18,8 +18,9 @@ const ModernNavbar = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [showDropdown, setShowDropdown] = useState(false);
   const location = useLocation();
-  const { isAuthenticated } = useSelector((state) => state.user);
+  const { isAuthenticated, authChecked } = useSelector((state) => state.user);
   const { t } = useTranslation();
+  console.log(isAuthenticated);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -49,7 +50,7 @@ const ModernNavbar = () => {
 
   return (
     <nav
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
+      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300  ${
         isScrolled
           ? "bg-soft-sand/95 dark:bg-gray-900/95 backdrop-blur-md shadow-soft border-b border-natural-blue/10 dark:border-gray-700"
           : "bg-transparent"
@@ -88,7 +89,7 @@ const ModernNavbar = () => {
               </button>
 
               {showDropdown === "explore" && (
-                <div className="absolute top-full left-0 mt-2 w-48 bg-white dark:bg-gray-800 rounded-lg shadow-blue border border-natural-blue/10 dark:border-gray-700 py-2">
+                <div className="absolute top-full left-0 w-48 bg-white dark:bg-gray-800 rounded-lg shadow-blue border border-natural-blue/10 dark:border-gray-700 py-2">
                   {explorePages.map((page) => (
                     <Link
                       key={page.to}
@@ -114,7 +115,7 @@ const ModernNavbar = () => {
               </button>
 
               {showDropdown === "about" && (
-                <div className="absolute top-full left-0 mt-2 w-48 bg-white dark:bg-gray-800 rounded-lg shadow-blue border border-natural-blue/10 dark:border-gray-700 py-2">
+                <div className="absolute top-full left-0 w-48 bg-white dark:bg-gray-800 rounded-lg shadow-blue border border-natural-blue/10 dark:border-gray-700 py-2">
                   {aboutPages.map((page) => (
                     <Link
                       key={page.to}
@@ -222,7 +223,7 @@ const ModernNavbar = () => {
                 <LanguageThemeToggle />
               </div>
 
-              {!isAuthenticated && (
+              {isAuthenticated !== "true" && (
                 <div className="pt-4 border-t border-natural-blue/20 dark:border-gray-700 space-y-2">
                   <Link
                     to="/login"

@@ -13,6 +13,7 @@ import {
   loginSuccess,
   loginFailure,
   clearError,
+  setAuthChecked,
 } from "../../rtk/features/userSlice";
 
 const loginSchema = z.object({
@@ -23,7 +24,9 @@ const loginSchema = z.object({
 const Login = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { loading, error, isAuthenticated } = useSelector((state) => state.user);
+  const { loading, error, isAuthenticated } = useSelector(
+    (state) => state.user
+  );
   const [showPassword, setShowPassword] = useState(false);
 
   const {
@@ -54,9 +57,10 @@ const Login = () => {
         email: data.email,
         password: data.password,
       });
-      
+
       localStorage.setItem("token", res.data.token);
       dispatch(loginSuccess(res.data.user));
+      dispatch(setAuthChecked(res.data.user));
       toast.success("Successfully logged in!");
       navigate("/");
     } catch (error) {
@@ -70,13 +74,15 @@ const Login = () => {
     <div className="min-h-screen flex bg-soft-sand">
       <div className="w-full lg:w-1/2 flex items-center justify-center p-8">
         <div className="max-w-md w-full space-y-8">
-          <div className="text-center">
+          <div className="text-center mt-10">
             <div className="flex justify-center mb-4">
               <div className="p-2 bg-natural-blue rounded-lg">
                 <Compass className="h-8 w-8 text-white" />
               </div>
             </div>
-            <h2 className="text-3xl font-bold text-deep-charcoal">Welcome back</h2>
+            <h2 className="text-3xl font-bold text-deep-charcoal">
+              Welcome back
+            </h2>
             <p className="mt-2 text-cool-gray">Sign in to your account</p>
           </div>
 
@@ -118,7 +124,11 @@ const Login = () => {
                   onClick={() => setShowPassword(!showPassword)}
                   className="absolute right-3 top-1/2 transform -translate-y-1/2 text-sea-blue hover:text-sea-blue-dark"
                 >
-                  {showPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
+                  {showPassword ? (
+                    <EyeOff className="h-5 w-5" />
+                  ) : (
+                    <Eye className="h-5 w-5" />
+                  )}
                 </button>
               </div>
               {errors.password && (
@@ -173,7 +183,7 @@ const Login = () => {
         className="hidden lg:block w-1/2 bg-cover bg-center"
         style={{
           backgroundImage:
-            "url(https://images.unsplash.com/photo-1608546043931-6c9678ea9feb?q=80&w=1920)",
+            "url(https://images.unsplash.com/photo-1552832230-c0197dd311b5?q=80&w=1920)",
         }}
       >
         <div className="h-full w-full bg-black bg-opacity-50 flex items-center justify-center p-12">

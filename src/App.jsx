@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Routes, Route } from "react-router-dom";
 import { Toaster } from "react-hot-toast";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
@@ -29,22 +29,36 @@ import SignIn from "./pages/auth/SignIn";
 import Login from "./pages/auth/Login";
 import SignUp from "./pages/auth/SignUp";
 import ManageCategories from "./pages/admin/pages/ManageCategories";
+import { useDispatch } from "react-redux";
+import { setUser } from "./rtk/features/userSlice";
 
 const queryClient = new QueryClient();
 
 function App() {
   const { i18n } = useTranslation();
-
+  const dispatch = useDispatch();
   // Set document direction based on language
-  React.useEffect(() => {
-    if (i18n.language === 'ar') {
-      document.documentElement.dir = 'rtl';
-      document.documentElement.lang = 'ar';
+  useEffect(() => {
+    if (i18n.language === "ar") {
+      document.documentElement.dir = "rtl";
+      document.documentElement.lang = "ar";
     } else {
-      document.documentElement.dir = 'ltr';
+      document.documentElement.dir = "ltr";
       document.documentElement.lang = i18n.language;
     }
   }, [i18n.language]);
+
+  // useEffect(() => {
+  //   const token = localStorage.getItem("token");
+
+  //   if (token) {
+  //     // You might fetch user info here
+  //     dispatch(setUser(userData));
+  //     dispatch(setAuthChecked(true));
+  //   } else {
+  //     dispatch(setAuthChecked (true));
+  //   }
+  // });
 
   return (
     <ThemeProvider>
@@ -69,11 +83,11 @@ function App() {
               <Route path="/about" element={<AboutUs />} />
               <Route path="/experiences" element={<CustomerExperiences />} />
               <Route path="/offers" element={<ExclusiveOffers />} />
-              
+
               {/* Auth Routes */}
               <Route path="/login" element={<Login />} />
               <Route path="/signup" element={<SignUp />} />
-              
+
               {/* Admin Routes */}
               <Route
                 path="/admin"
@@ -123,10 +137,10 @@ function App() {
                   </RequireAuth>
                 }
               />
-              
+
               {/* Legacy signin route for backward compatibility */}
               <Route path="/signin" element={<SignIn />} />
-              
+
               {/* 404 Route */}
               <Route path="/*" element={<p>404 Page Not Found</p>} />
             </Routes>

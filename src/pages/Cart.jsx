@@ -1,6 +1,17 @@
 import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { Trash2, Calendar, MapPin, ArrowLeft, ShoppingCart, ArrowRight, Clock, Users, X, Star } from "lucide-react";
+import {
+  Trash2,
+  Calendar,
+  MapPin,
+  ArrowLeft,
+  ShoppingCart,
+  ArrowRight,
+  Clock,
+  Users,
+  X,
+  Star,
+} from "lucide-react";
 import { useDispatch, useSelector } from "react-redux";
 import { removeFromCart } from "../rtk/features/cartSlice";
 import toast from "react-hot-toast";
@@ -14,7 +25,9 @@ const Cart = () => {
 
   const handleRemoveFromCart = (tripId) => {
     dispatch(removeFromCart(tripId));
-    setTripsArray(prev => prev.filter(trip => trip._id !== tripId && trip.id !== tripId));
+    setTripsArray((prev) =>
+      prev.filter((trip) => trip._id !== tripId && trip.id !== tripId)
+    );
     toast.success("Item removed from cart");
   };
 
@@ -43,14 +56,18 @@ const Cart = () => {
 
   if (!isAuthenticated) {
     return (
-      <div className="min-h-screen bg-soft-sand py-12 px-4">
+      <div className="min-h-screen bg-soft-sand py-12 px-4 mt-20">
         <div className="max-w-6xl mx-auto">
           <div className="bg-white rounded-2xl shadow-soft p-8 text-center">
             <div className="w-20 h-20 bg-natural-blue/10 rounded-full flex items-center justify-center mx-auto mb-6">
               <ShoppingCart className="h-10 w-10 text-natural-blue" />
             </div>
-            <h1 className="text-2xl font-bold text-deep-charcoal mb-4">Your Shopping Cart</h1>
-            <p className="text-cool-gray mb-8 max-w-md mx-auto">Please sign in to view and manage your cart items</p>
+            <h1 className="text-2xl font-bold text-deep-charcoal mb-4">
+              Your Shopping Cart
+            </h1>
+            <p className="text-cool-gray mb-8 max-w-md mx-auto">
+              Please sign in to view and manage your cart items
+            </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link
                 to="/login"
@@ -79,8 +96,12 @@ const Cart = () => {
             <div className="w-20 h-20 bg-natural-blue/10 rounded-full flex items-center justify-center mx-auto mb-6">
               <ShoppingCart className="h-10 w-10 text-natural-blue" />
             </div>
-            <h1 className="text-2xl font-bold text-deep-charcoal mb-4">Your Cart is Empty</h1>
-            <p className="text-cool-gray mb-8 max-w-md mx-auto">Add trips to your cart to continue with booking</p>
+            <h1 className="text-2xl font-bold text-deep-charcoal mb-4">
+              Your Cart is Empty
+            </h1>
+            <p className="text-cool-gray mb-8 max-w-md mx-auto">
+              Add trips to your cart to continue with booking
+            </p>
             <Link
               to="/trips"
               className="px-6 py-3 bg-natural-blue text-white rounded-xl hover:bg-natural-blue-dark transition-colors shadow-soft inline-flex items-center gap-2"
@@ -119,7 +140,10 @@ const Cart = () => {
                 <div className="md:flex">
                   <div className="md:w-1/3 h-48 md:h-auto">
                     <img
-                      src={trip.imageCover || "https://images.unsplash.com/photo-1539650116574-8efeb43e2750?q=80&w=1920"}
+                      src={
+                        trip.imageCover ||
+                        "https://images.unsplash.com/photo-1539650116574-8efeb43e2750?q=80&w=1920"
+                      }
                       alt={trip.title}
                       className="w-full h-full object-cover"
                     />
@@ -150,14 +174,16 @@ const Cart = () => {
                         </div>
                       </div>
                       <button
-                        onClick={() => handleRemoveFromCart(trip._id || trip.id)}
+                        onClick={() =>
+                          handleRemoveFromCart(trip._id || trip.id)
+                        }
                         className="p-2 text-red-500 hover:bg-red-50 rounded-full transition-colors"
                         title="Remove from cart"
                       >
                         <X className="h-5 w-5" />
                       </button>
                     </div>
-                    
+
                     <div className="flex items-center justify-between mt-4 pt-4 border-t border-gray-100">
                       <div className="flex items-center gap-2">
                         <div className="flex">
@@ -192,16 +218,19 @@ const Cart = () => {
               <h2 className="text-xl font-bold text-deep-charcoal mb-6">
                 Order Summary
               </h2>
-              
+
               <div className="space-y-4 mb-6">
                 {tripsArray.map((trip) => (
-                  <div key={trip._id || trip.id} className="flex justify-between text-cool-gray">
+                  <div
+                    key={trip._id || trip.id}
+                    className="flex justify-between text-cool-gray"
+                  >
                     <span className="truncate max-w-[200px]">{trip.title}</span>
                     <span>${trip.price}</span>
                   </div>
                 ))}
               </div>
-              
+
               <div className="border-t border-gray-100 pt-4 mb-6">
                 <div className="flex justify-between text-cool-gray mb-2">
                   <span>Subtotal</span>
@@ -216,7 +245,7 @@ const Cart = () => {
                   <span>${calculateTotal()}</span>
                 </div>
               </div>
-              
+
               <button
                 onClick={handleCheckout}
                 className="w-full py-3 bg-warm-orange text-deep-charcoal rounded-xl hover:bg-warm-orange-dark transition-colors font-medium shadow-warm flex items-center justify-center gap-2"
@@ -224,9 +253,10 @@ const Cart = () => {
                 Proceed to Checkout
                 <ArrowRight className="h-5 w-5" />
               </button>
-              
+
               <div className="mt-4 text-xs text-cool-gray text-center">
-                By proceeding, you agree to our Terms of Service and Privacy Policy
+                By proceeding, you agree to our Terms of Service and Privacy
+                Policy
               </div>
             </div>
           </div>
