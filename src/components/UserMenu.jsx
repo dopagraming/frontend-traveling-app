@@ -9,7 +9,6 @@ const UserMenu = () => {
   const [isOpen, setIsOpen] = useState(false);
   const dispatch = useDispatch();
   const { user, isAuthenticated } = useSelector((state) => state.user);
-
   const handleLogout = () => {
     dispatch(logout());
     toast.success("Logged out successfully");

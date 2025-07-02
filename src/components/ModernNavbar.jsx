@@ -223,7 +223,7 @@ const ModernNavbar = () => {
                 <LanguageThemeToggle />
               </div>
 
-              {isAuthenticated !== "true" && (
+              {!isAuthenticated && (
                 <div className="pt-4 border-t border-natural-blue/20 dark:border-gray-700 space-y-2">
                   <Link
                     to="/login"

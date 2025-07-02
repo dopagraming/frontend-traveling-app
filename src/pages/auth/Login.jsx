@@ -59,8 +59,8 @@ const Login = () => {
       });
 
       localStorage.setItem("token", res.data.token);
-      dispatch(loginSuccess(res.data.user));
-      dispatch(setAuthChecked(res.data.user));
+      dispatch(loginSuccess(res.data.data));
+      dispatch(setAuthChecked(res.data.data));
       toast.success("Successfully logged in!");
       navigate("/");
     } catch (error) {

@@ -78,7 +78,7 @@ function App() {
               <Route path="/contact" element={<Contact />} />
               <Route path="/cart" element={<Cart />} />
               <Route path="/wishlist" element={<Wishlist />} />
-              <Route path="/my-account" element={<MyAccount />} />
+              <Route path="/profile" element={<MyAccount />} />
               <Route path="/create-trip" element={<CreateTrip />} />
               <Route path="/about" element={<AboutUs />} />
               <Route path="/experiences" element={<CustomerExperiences />} />

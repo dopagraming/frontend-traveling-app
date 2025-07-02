@@ -1,19 +1,75 @@
-import React, { useState } from 'react';
-import { Search, MapPin, Calendar, Users, Plane } from 'lucide-react';
-import { useTranslation } from 'react-i18next';
+import React, { useState } from "react";
+import { Search, MapPin, Calendar, Users, Plane } from "lucide-react";
+import { useTranslation } from "react-i18next";
+import { useNavigate } from "react-router-dom";
+import { toast } from "react-hot-toast";
+import api from "../lib/axios";
 
 const HeroSection = () => {
   const { t } = useTranslation();
+  const navigate = useNavigate();
   const [searchData, setSearchData] = useState({
-    destination: '',
-    checkIn: '',
-    checkOut: '',
-    people: 1
+    destination: "",
+    checkIn: "",
+    checkOut: "",
+    people: 1,
   });
+  const [isSearching, setIsSearching] = useState(false);
 
-  const handleSearch = (e) => {
+  const handleSearch = async (e) => {
     e.preventDefault();
-    console.log('Search data:', searchData);
+
+    if (!searchData.destination.trim()) {
+      toast.error("Please enter a destination");
+      return;
+    }
+
+    setIsSearching(true);
+
+    try {
+      // Search for trips based on destination
+      const response = await api.post("/trips/search-trips", {
+        keyword: searchData.destination,
+        date: searchData.checkIn || null,
+        people: searchData.people,
+      });
+
+      if (response.data && response.data.length > 0) {
+        // Navigate to trips page with search results
+        navigate("/trips", {
+          state: {
+            searchResults: response.data,
+            searchTerm: searchData.destination,
+            searchData: searchData,
+          },
+        });
+        toast.success(
+          `Found ${response.data.length} trips for "${searchData.destination}"`
+        );
+      } else {
+        toast.error(`No trips found for "${searchData.destination}"`);
+        // Still navigate to trips page to show empty results
+        navigate("/trips", {
+          state: {
+            searchResults: [],
+            searchTerm: searchData.destination,
+            searchData: searchData,
+          },
+        });
+      }
+    } catch (error) {
+      console.error("Search error:", error);
+      toast.error("Search failed. Please try again.");
+    } finally {
+      setIsSearching(false);
+    }
+  };
+
+  const handleInputChange = (field, value) => {
+    setSearchData((prev) => ({
+      ...prev,
+      [field]: value,
+    }));
   };
 
   return (
@@ -34,35 +90,43 @@ const HeroSection = () => {
               Discover Amazing Places
             </span>
           </div>
-          
+
           <h1 className="text-5xl md:text-7xl font-bold mb-6 leading-tight">
-            {t('hero.title')}
-            <span className="block text-warm-orange">{t('hero.titleAccent')}</span>
-            {t('hero.titleEnd')}
+            {t("hero.title")}
+            <span className="block text-warm-orange">
+              {t("hero.titleAccent")}
+            </span>
+            {t("hero.titleEnd")}
           </h1>
-          
+
           <p className="text-xl md:text-2xl mb-8 max-w-3xl mx-auto opacity-90">
-            {t('hero.subtitle')}
+            {t("hero.subtitle")}
           </p>
         </div>
 
         {/* Search Bar */}
         <div className="max-w-4xl mx-auto">
-          <form onSubmit={handleSearch} className="glass rounded-2xl p-6 shadow-2xl">
+          <form
+            onSubmit={handleSearch}
+            className="glass rounded-2xl p-6 shadow-2xl"
+          >
             <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
               {/* Destination */}
               <div className="relative">
                 <label className="block text-sm font-medium text-deep-charcoal dark:text-gray-300 mb-2">
-                  {t('hero.whereTo')}
+                  {t("hero.whereTo")}
                 </label>
                 <div className="relative">
                   <MapPin className="absolute left-3 top-1/2 transform -translate-y-1/2 text-natural-blue w-5 h-5" />
                   <input
                     type="text"
-                    placeholder={t('hero.searchPlaceholder')}
+                    placeholder={t("hero.searchPlaceholder")}
                     value={searchData.destination}
-                    onChange={(e) => setSearchData({...searchData, destination: e.target.value})}
+                    onChange={(e) =>
+                      handleInputChange("destination", e.target.value)
+                    }
                     className="w-full pl-10 pr-4 py-3 rounded-lg border border-natural-blue/30 focus:border-natural-blue focus:ring-2 focus:ring-natural-blue/20 bg-soft-sand dark:bg-gray-800 text-deep-charcoal dark:text-white"
+                    required
                   />
                 </div>
               </div>
@@ -70,14 +134,17 @@ const HeroSection = () => {
               {/* Check In */}
               <div className="relative">
                 <label className="block text-sm font-medium text-deep-charcoal dark:text-gray-300 mb-2">
-                  {t('hero.checkIn')}
+                  {t("hero.checkIn")}
                 </label>
                 <div className="relative">
                   <Calendar className="absolute left-3 top-1/2 transform -translate-y-1/2 text-natural-blue w-5 h-5" />
                   <input
                     type="date"
                     value={searchData.checkIn}
-                    onChange={(e) => setSearchData({...searchData, checkIn: e.target.value})}
+                    onChange={(e) =>
+                      handleInputChange("checkIn", e.target.value)
+                    }
+                    min={new Date().toISOString().split("T")[0]}
                     className="w-full pl-10 pr-4 py-3 rounded-lg border border-natural-blue/30 focus:border-natural-blue focus:ring-2 focus:ring-natural-blue/20 bg-soft-sand dark:bg-gray-800 text-deep-charcoal dark:text-white"
                   />
                 </div>
@@ -86,14 +153,20 @@ const HeroSection = () => {
               {/* Check Out */}
               <div className="relative">
                 <label className="block text-sm font-medium text-deep-charcoal dark:text-gray-300 mb-2">
-                  {t('hero.checkOut')}
+                  {t("hero.checkOut")}
                 </label>
                 <div className="relative">
                   <Calendar className="absolute left-3 top-1/2 transform -translate-y-1/2 text-natural-blue w-5 h-5" />
                   <input
                     type="date"
                     value={searchData.checkOut}
-                    onChange={(e) => setSearchData({...searchData, checkOut: e.target.value})}
+                    onChange={(e) =>
+                      handleInputChange("checkOut", e.target.value)
+                    }
+                    min={
+                      searchData.checkIn ||
+                      new Date().toISOString().split("T")[0]
+                    }
                     className="w-full pl-10 pr-4 py-3 rounded-lg border border-natural-blue/30 focus:border-natural-blue focus:ring-2 focus:ring-natural-blue/20 bg-soft-sand dark:bg-gray-800 text-deep-charcoal dark:text-white"
                   />
                 </div>
@@ -102,18 +175,20 @@ const HeroSection = () => {
               {/* People */}
               <div className="relative">
                 <label className="block text-sm font-medium text-deep-charcoal dark:text-gray-300 mb-2">
-                  {t('hero.travelers')}
+                  {t("hero.travelers")}
                 </label>
                 <div className="relative">
                   <Users className="absolute left-3 top-1/2 transform -translate-y-1/2 text-natural-blue w-5 h-5" />
                   <select
                     value={searchData.people}
-                    onChange={(e) => setSearchData({...searchData, people: e.target.value})}
+                    onChange={(e) =>
+                      handleInputChange("people", parseInt(e.target.value))
+                    }
                     className="w-full pl-10 pr-4 py-3 rounded-lg border border-natural-blue/30 focus:border-natural-blue focus:ring-2 focus:ring-natural-blue/20 bg-soft-sand dark:bg-gray-800 text-deep-charcoal dark:text-white"
                   >
-                    {[1,2,3,4,5,6,7,8].map(num => (
+                    {[1, 2, 3, 4, 5, 6, 7, 8].map((num) => (
                       <option key={num} value={num}>
-                        {num} {num === 1 ? t('hero.person') : t('hero.people')}
+                        {num} {num === 1 ? t("hero.person") : t("hero.people")}
                       </option>
                     ))}
                   </select>
@@ -125,10 +200,11 @@ const HeroSection = () => {
             <div className="mt-6 text-center">
               <button
                 type="submit"
-                className="inline-flex items-center px-8 py-4 bg-warm-orange text-deep-charcoal font-semibold rounded-xl hover:bg-warm-orange-dark transition-all duration-300 shadow-warm hover:shadow-xl transform hover:-translate-y-1"
+                disabled={isSearching || !searchData.destination.trim()}
+                className="inline-flex items-center px-8 py-4 bg-warm-orange text-deep-charcoal font-semibold rounded-xl hover:bg-warm-orange-dark transition-all duration-300 shadow-warm hover:shadow-xl transform hover:-translate-y-1 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
               >
                 <Search className="w-5 h-5 mr-2" />
-                {t('hero.searchAdventures')}
+                {isSearching ? "Searching..." : t("hero.searchAdventures")}
               </button>
             </div>
           </form>

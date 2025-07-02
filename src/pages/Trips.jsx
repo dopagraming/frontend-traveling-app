@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { Search, Filter, MapPin, Star, Clock, Users } from "lucide-react";
+import { useLocation } from "react-router-dom";
 import TripCard from "../components/TripCard";
 import useGetItems from "../hooks/useGetProducts";
 import api from "../lib/axios";
 
 const Trips = () => {
+  const location = useLocation();
   const { data: allTrips, isLoading, error } = useGetItems("trips");
   const [trips, setTrips] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
@@ -13,13 +15,22 @@ const Trips = () => {
     priceRange: "",
     duration: "",
     type: "",
-    sort: ""
+    sort: "",
   });
   const [showFilters, setShowFilters] = useState(false);
 
+  // Handle search results from hero section
   useEffect(() => {
-    setTrips(allTrips);
-  }, [allTrips]);
+    if (location.state?.searchResults) {
+      setTrips(location.state.searchResults);
+      setSearchTerm(location.state.searchTerm || "");
+
+      // Clear the location state to prevent issues on refresh
+      window.history.replaceState({}, document.title);
+    } else {
+      setTrips(allTrips);
+    }
+  }, [allTrips, location.state]);
 
   const handleSearch = async () => {
     if (!searchTerm.trim()) {
@@ -39,7 +50,7 @@ const Trips = () => {
   };
 
   const handleFilterChange = (key, value) => {
-    setFilters(prev => ({ ...prev, [key]: value }));
+    setFilters((prev) => ({ ...prev, [key]: value }));
   };
 
   const applyFilters = () => {
@@ -47,20 +58,24 @@ const Trips = () => {
 
     // Apply destination filter
     if (filters.destination) {
-      filteredTrips = filteredTrips.filter(trip =>
-        trip.destination?.toLowerCase().includes(filters.destination.toLowerCase())
+      filteredTrips = filteredTrips.filter((trip) =>
+        trip.destination
+          ?.toLowerCase()
+          .includes(filters.destination.toLowerCase())
       );
     }
 
     // Apply type filter
     if (filters.type) {
-      filteredTrips = filteredTrips.filter(trip => trip.type === filters.type);
+      filteredTrips = filteredTrips.filter(
+        (trip) => trip.type === filters.type
+      );
     }
 
     // Apply price range filter
     if (filters.priceRange) {
-      const [min, max] = filters.priceRange.split('-').map(Number);
-      filteredTrips = filteredTrips.filter(trip => {
+      const [min, max] = filters.priceRange.split("-").map(Number);
+      filteredTrips = filteredTrips.filter((trip) => {
         const price = trip.price;
         if (max) {
           return price >= min && price <= max;
@@ -73,7 +88,7 @@ const Trips = () => {
     // Apply duration filter
     if (filters.duration) {
       const duration = parseInt(filters.duration);
-      filteredTrips = filteredTrips.filter(trip => {
+      filteredTrips = filteredTrips.filter((trip) => {
         if (duration === 1) return trip.duration <= 3;
         if (duration === 7) return trip.duration >= 4 && trip.duration <= 7;
         if (duration === 14) return trip.duration >= 8;
@@ -85,13 +100,13 @@ const Trips = () => {
     if (filters.sort) {
       filteredTrips.sort((a, b) => {
         switch (filters.sort) {
-          case 'price-asc':
+          case "price-asc":
             return a.price - b.price;
-          case 'price-desc':
+          case "price-desc":
             return b.price - a.price;
-          case 'rating':
+          case "rating":
             return (b.ratingsAverage || 0) - (a.ratingsAverage || 0);
-          case 'duration':
+          case "duration":
             return a.duration - b.duration;
           default:
             return 0;
@@ -109,7 +124,7 @@ const Trips = () => {
       priceRange: "",
       duration: "",
       type: "",
-      sort: ""
+      sort: "",
     });
     setSearchTerm("");
     setTrips(allTrips);
@@ -122,7 +137,9 @@ const Trips = () => {
           <div className="flex justify-center">
             <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-natural-blue"></div>
           </div>
-          <p className="text-center mt-4 text-cool-gray">Loading amazing trips...</p>
+          <p className="text-center mt-4 text-cool-gray">
+            Loading amazing trips...
+          </p>
         </div>
       </div>
     );
@@ -132,8 +149,12 @@ const Trips = () => {
     return (
       <div className="min-h-screen bg-soft-sand flex items-center justify-center">
         <div className="bg-white p-8 rounded-xl shadow-soft text-center">
-          <h2 className="text-2xl font-bold text-deep-charcoal mb-4">Oops! Something went wrong</h2>
-          <p className="text-cool-gray mb-6">We couldn't load the trips. Please try again later.</p>
+          <h2 className="text-2xl font-bold text-deep-charcoal mb-4">
+            Oops! Something went wrong
+          </h2>
+          <p className="text-cool-gray mb-6">
+            We couldn't load the trips. Please try again later.
+          </p>
           <button
             onClick={() => window.location.reload()}
             className="px-6 py-3 bg-natural-blue text-white rounded-lg hover:bg-natural-blue-dark transition-colors"
@@ -150,8 +171,16 @@ const Trips = () => {
       {/* Header */}
       <div className="bg-natural-blue text-white py-16">
         <div className="container mx-auto px-4">
-          <h1 className="text-4xl md:text-5xl font-bold mb-4">Discover Amazing Trips</h1>
-          <p className="text-xl opacity-90">Find your perfect adventure from our curated collection</p>
+          <h1 className="text-4xl md:text-5xl font-bold mb-4">
+            {location.state?.searchTerm
+              ? `Search Results for "${location.state.searchTerm}"`
+              : "Discover Amazing Trips"}
+          </h1>
+          <p className="text-xl opacity-90">
+            {location.state?.searchTerm
+              ? `Found ${trips.length} trips matching your search`
+              : "Find your perfect adventure from our curated collection"}
+          </p>
         </div>
       </div>
 
@@ -167,7 +196,7 @@ const Trips = () => {
                 placeholder="Search destinations, activities..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                onKeyPress={(e) => e.key === 'Enter' && handleSearch()}
+                onKeyPress={(e) => e.key === "Enter" && handleSearch()}
                 className="w-full pl-10 pr-4 py-3 border border-natural-blue/30 rounded-lg focus:border-natural-blue focus:ring-2 focus:ring-natural-blue/20"
               />
             </div>
@@ -202,7 +231,9 @@ const Trips = () => {
                     type="text"
                     placeholder="Any destination"
                     value={filters.destination}
-                    onChange={(e) => handleFilterChange('destination', e.target.value)}
+                    onChange={(e) =>
+                      handleFilterChange("destination", e.target.value)
+                    }
                     className="w-full px-3 py-2 border border-natural-blue/30 rounded-lg focus:border-natural-blue"
                   />
                 </div>
@@ -213,7 +244,7 @@ const Trips = () => {
                   </label>
                   <select
                     value={filters.type}
-                    onChange={(e) => handleFilterChange('type', e.target.value)}
+                    onChange={(e) => handleFilterChange("type", e.target.value)}
                     className="w-full px-3 py-2 border border-natural-blue/30 rounded-lg focus:border-natural-blue"
                   >
                     <option value="">All Types</option>
@@ -231,7 +262,9 @@ const Trips = () => {
                   </label>
                   <select
                     value={filters.priceRange}
-                    onChange={(e) => handleFilterChange('priceRange', e.target.value)}
+                    onChange={(e) =>
+                      handleFilterChange("priceRange", e.target.value)
+                    }
                     className="w-full px-3 py-2 border border-natural-blue/30 rounded-lg focus:border-natural-blue"
                   >
                     <option value="">Any Price</option>
@@ -248,7 +281,9 @@ const Trips = () => {
                   </label>
                   <select
                     value={filters.duration}
-                    onChange={(e) => handleFilterChange('duration', e.target.value)}
+                    onChange={(e) =>
+                      handleFilterChange("duration", e.target.value)
+                    }
                     className="w-full px-3 py-2 border border-natural-blue/30 rounded-lg focus:border-natural-blue"
                   >
                     <option value="">Any Duration</option>
@@ -264,7 +299,7 @@ const Trips = () => {
                   </label>
                   <select
                     value={filters.sort}
-                    onChange={(e) => handleFilterChange('sort', e.target.value)}
+                    onChange={(e) => handleFilterChange("sort", e.target.value)}
                     className="w-full px-3 py-2 border border-natural-blue/30 rounded-lg focus:border-natural-blue"
                   >
                     <option value="">Recommended</option>
@@ -298,7 +333,7 @@ const Trips = () => {
         <div className="flex justify-between items-center mb-8">
           <div>
             <h2 className="text-2xl font-bold text-deep-charcoal">
-              {searchTerm ? `Search Results for "${searchTerm}"` : 'All Trips'}
+              {searchTerm ? `Search Results for "${searchTerm}"` : "All Trips"}
             </h2>
             <p className="text-cool-gray mt-1">
               Showing {trips.length} of {allTrips.length} amazing destinations
@@ -312,14 +347,15 @@ const Trips = () => {
             <div className="w-24 h-24 bg-natural-blue/10 rounded-full flex items-center justify-center mx-auto mb-6">
               <MapPin className="w-12 h-12 text-natural-blue" />
             </div>
-            <h3 className="text-xl font-bold text-deep-charcoal mb-2">No trips found</h3>
+            <h3 className="text-xl font-bold text-deep-charcoal mb-2">
+              No trips found
+            </h3>
             <p className="text-cool-gray mb-6">
-              {searchTerm || Object.values(filters).some(f => f) 
+              {searchTerm || Object.values(filters).some((f) => f)
                 ? "Try adjusting your search or filters to find more trips."
-                : "No trips are available at the moment."
-              }
+                : "No trips are available at the moment."}
             </p>
-            {(searchTerm || Object.values(filters).some(f => f)) && (
+            {(searchTerm || Object.values(filters).some((f) => f)) && (
               <button
                 onClick={clearFilters}
                 className="px-6 py-3 bg-natural-blue text-white rounded-lg hover:bg-natural-blue-dark transition-colors"
