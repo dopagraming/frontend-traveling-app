@@ -30,7 +30,8 @@ import Login from "./pages/auth/Login";
 import SignUp from "./pages/auth/SignUp";
 import ManageCategories from "./pages/admin/pages/ManageCategories";
 import { useDispatch } from "react-redux";
-import { setUser } from "./rtk/features/userSlice";
+import { setAuthChecked, setUser } from "./rtk/features/userSlice";
+import api from "./lib/axios";
 
 const queryClient = new QueryClient();
 
@@ -48,17 +49,24 @@ function App() {
     }
   }, [i18n.language]);
 
-  // useEffect(() => {
-  //   const token = localStorage.getItem("token");
+  useEffect(() => {
+    const fetchUser = async () => {
+      const token = localStorage.getItem("token");
 
-  //   if (token) {
-  //     // You might fetch user info here
-  //     dispatch(setUser(userData));
-  //     dispatch(setAuthChecked(true));
-  //   } else {
-  //     dispatch(setAuthChecked (true));
-  //   }
-  // });
+      if (!token) return;
+      try {
+        const response = await api.get("/users/getMe");
+        const userData = response.data.data;
+        dispatch(setUser(userData));
+        dispatch(setAuthChecked(true));
+      } catch (error) {
+        dispatch(setAuthChecked(true));
+        localStorage.removeItem("token");
+      }
+    };
+
+    fetchUser();
+  }, []);
 
   return (
     <ThemeProvider>

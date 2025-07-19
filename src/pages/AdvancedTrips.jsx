@@ -1,17 +1,38 @@
-import React, { useState, useEffect } from 'react';
-import { Filter, Search, MapPin, Clock, Star, Heart, Share2, Calendar, Users, DollarSign, Play, MessageCircle, Zap, Award, Timer, RotateCcw, ChevronDown, X, Eye, GitCompare as Compare } from 'lucide-react';
+import React, { useState, useEffect } from "react";
+import {
+  Filter,
+  Search,
+  MapPin,
+  Clock,
+  Star,
+  Heart,
+  Share2,
+  Calendar,
+  Users,
+  DollarSign,
+  Play,
+  MessageCircle,
+  Zap,
+  Award,
+  Timer,
+  RotateCcw,
+  ChevronDown,
+  X,
+  Eye,
+  GitCompare as Compare,
+} from "lucide-react";
 
 const AdvancedTrips = () => {
   const [filters, setFilters] = useState({
-    type: '',
-    duration: '',
+    type: "",
+    duration: "",
     priceRange: [0, 2000],
     rating: 0,
-    showCompleted: false
+    showCompleted: false,
   });
-  
-  const [sortBy, setSortBy] = useState('recommended');
-  const [searchTerm, setSearchTerm] = useState('');
+
+  const [sortBy, setSortBy] = useState("recommended");
+  const [searchTerm, setSearchTerm] = useState("");
   const [compareList, setCompareList] = useState([]);
   const [showComparison, setShowComparison] = useState(false);
   const [showFilters, setShowFilters] = useState(false);
@@ -27,16 +48,18 @@ const AdvancedTrips = () => {
       originalPrice: 399,
       rating: 4.8,
       reviews: 234,
-      image: "https://images.unsplash.com/photo-1539650116574-8efeb43e2750?w=400&h=300&fit=crop",
+      image:
+        "https://images.unsplash.com/photo-1539650116574-8efeb43e2750?w=400&h=300&fit=crop",
       video: "https://example.com/video1.mp4",
       type: "cultural",
       badges: ["New", "Popular"],
       discount: 25,
       timeLeft: "48:30:15",
-      description: "Discover the wonders of ancient Egypt with a comprehensive tour of the pyramids and sphinx",
+      description:
+        "Discover the wonders of ancient Egypt with a comprehensive tour of the pyramids and sphinx",
       included: ["Transport", "Breakfast", "Tour Guide"],
       groupSize: "8-15 people",
-      completed: false
+      completed: false,
     },
     {
       id: 2,
@@ -47,16 +70,18 @@ const AdvancedTrips = () => {
       originalPrice: 249,
       rating: 4.9,
       reviews: 156,
-      image: "https://images.unsplash.com/photo-1451337516015-6b6e9a44a8a3?w=400&h=300&fit=crop",
+      image:
+        "https://images.unsplash.com/photo-1451337516015-6b6e9a44a8a3?w=400&h=300&fit=crop",
       video: "https://example.com/video2.mp4",
       type: "adventure",
       badges: ["Limited Offer"],
       discount: 20,
       timeLeft: "72:15:30",
-      description: "Thrilling desert experience with dune bashing, camel riding, and traditional dinner",
+      description:
+        "Thrilling desert experience with dune bashing, camel riding, and traditional dinner",
       included: ["4WD Safari", "Camel Ride", "BBQ Dinner"],
       groupSize: "6-12 people",
-      completed: false
+      completed: false,
     },
     {
       id: 3,
@@ -67,85 +92,104 @@ const AdvancedTrips = () => {
       originalPrice: 1599,
       rating: 4.7,
       reviews: 89,
-      image: "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400&h=300&fit=crop",
+      image:
+        "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400&h=300&fit=crop",
       video: "https://example.com/video3.mp4",
       type: "relaxation",
       badges: ["Luxury"],
       discount: 19,
       timeLeft: "120:45:20",
-      description: "Ultimate relaxation in overwater villas with pristine beaches and crystal clear waters",
+      description:
+        "Ultimate relaxation in overwater villas with pristine beaches and crystal clear waters",
       included: ["Villa Stay", "All Meals", "Spa Access"],
       groupSize: "2-4 people",
-      completed: true
-    }
+      completed: true,
+    },
   ];
 
   const tripTypes = [
-    { value: 'family', label: 'Family' },
-    { value: 'adventure', label: 'Adventure' },
-    { value: 'relaxation', label: 'Relaxation' },
-    { value: 'cultural', label: 'Cultural' },
-    { value: 'luxury', label: 'Luxury' }
+    { value: "family", label: "Family" },
+    { value: "adventure", label: "Adventure" },
+    { value: "relaxation", label: "Relaxation" },
+    { value: "cultural", label: "Cultural" },
+    { value: "luxury", label: "Luxury" },
   ];
 
   const durations = [
-    { value: '1', label: '1 day' },
-    { value: '3', label: '2-3 days' },
-    { value: '7', label: '1 week' },
-    { value: '14', label: '2 weeks' },
-    { value: '30', label: '1 month+' }
+    { value: "1", label: "1 day" },
+    { value: "3", label: "2-3 days" },
+    { value: "7", label: "1 week" },
+    { value: "14", label: "2 weeks" },
+    { value: "30", label: "1 month+" },
   ];
 
-  const filteredTrips = trips.filter(trip => {
+  const filteredTrips = trips.filter((trip) => {
     if (filters.showCompleted && !trip.completed) return false;
     if (!filters.showCompleted && trip.completed) return false;
     if (filters.type && trip.type !== filters.type) return false;
     if (filters.rating && trip.rating < filters.rating) return false;
-    if (trip.price < filters.priceRange[0] || trip.price > filters.priceRange[1]) return false;
-    if (searchTerm && !trip.title.toLowerCase().includes(searchTerm.toLowerCase())) return false;
+    if (
+      trip.price < filters.priceRange[0] ||
+      trip.price > filters.priceRange[1]
+    )
+      return false;
+    if (
+      searchTerm &&
+      !trip.title.toLowerCase().includes(searchTerm.toLowerCase())
+    )
+      return false;
     return true;
   });
 
   const sortedTrips = [...filteredTrips].sort((a, b) => {
     switch (sortBy) {
-      case 'price-asc': return a.price - b.price;
-      case 'price-desc': return b.price - a.price;
-      case 'rating': return b.rating - a.rating;
-      case 'distance': return 0; // Would implement geolocation logic
-      default: return 0;
+      case "price-asc":
+        return a.price - b.price;
+      case "price-desc":
+        return b.price - a.price;
+      case "rating":
+        return b.rating - a.rating;
+      case "distance":
+        return 0; // Would implement geolocation logic
+      default:
+        return 0;
     }
   });
 
   const addToCompare = (trip) => {
-    if (compareList.length < 3 && !compareList.find(t => t.id === trip.id)) {
+    if (compareList.length < 3 && !compareList.find((t) => t.id === trip.id)) {
       setCompareList([...compareList, trip]);
     }
   };
 
   const removeFromCompare = (tripId) => {
-    setCompareList(compareList.filter(t => t.id !== tripId));
+    setCompareList(compareList.filter((t) => t.id !== tripId));
   };
 
   const CountdownTimer = ({ timeLeft }) => {
     const [time, setTime] = useState(timeLeft);
-    
+
     useEffect(() => {
       const timer = setInterval(() => {
-        const [hours, minutes, seconds] = time.split(':').map(Number);
+        const [hours, minutes, seconds] = time.split(":").map(Number);
         const totalSeconds = hours * 3600 + minutes * 60 + seconds - 1;
-        
+
         if (totalSeconds <= 0) {
           clearInterval(timer);
           return;
         }
-        
+
         const newHours = Math.floor(totalSeconds / 3600);
         const newMinutes = Math.floor((totalSeconds % 3600) / 60);
         const newSeconds = totalSeconds % 60;
-        
-        setTime(`${newHours.toString().padStart(2, '0')}:${newMinutes.toString().padStart(2, '0')}:${newSeconds.toString().padStart(2, '0')}`);
+
+        setTime(
+          `${newHours.toString().padStart(2, "0")}:${newMinutes
+            .toString()
+            .padStart(2, "0")}:${newSeconds.toString().padStart(2, "0")}`
+        );
       }, 1000);
-      
+
       return () => clearInterval(timer);
     }, [time]);
 
@@ -162,8 +206,12 @@ const AdvancedTrips = () => {
       {/* Header */}
       <div className="bg-natural-blue text-white py-16">
         <div className="container mx-auto px-4">
-          <h1 className="text-4xl md:text-5xl font-bold mb-4">Discover Amazing Trips</h1>
-          <p className="text-xl opacity-90">Find your perfect adventure from our curated collection</p>
+          <h1 className="text-4xl md:text-5xl font-bold mb-4">
+            Discover Amazing Trips
+          </h1>
+          <p className="text-xl opacity-90">
+            Find your perfect adventure from our curated collection
+          </p>
         </div>
       </div>
 
@@ -190,7 +238,11 @@ const AdvancedTrips = () => {
             >
               <Filter className="w-5 h-5" />
               Filters
-              <ChevronDown className={`w-4 h-4 transition-transform ${showFilters ? 'rotate-180' : ''}`} />
+              <ChevronDown
+                className={`w-4 h-4 transition-transform ${
+                  showFilters ? "rotate-180" : ""
+                }`}
+              />
             </button>
 
             {/* Sort */}
@@ -213,30 +265,42 @@ const AdvancedTrips = () => {
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                 {/* Trip Type */}
                 <div>
-                  <label className="block text-sm font-medium text-deep-charcoal mb-2">Trip Type</label>
+                  <label className="block text-sm font-medium text-deep-charcoal mb-2">
+                    Trip Type
+                  </label>
                   <select
                     value={filters.type}
-                    onChange={(e) => setFilters({...filters, type: e.target.value})}
+                    onChange={(e) =>
+                      setFilters({ ...filters, type: e.target.value })
+                    }
                     className="w-full px-3 py-2 border border-natural-blue/30 rounded-lg focus:border-natural-blue"
                   >
                     <option value="">All Types</option>
-                    {tripTypes.map(type => (
-                      <option key={type.value} value={type.value}>{type.label}</option>
+                    {tripTypes.map((type) => (
+                      <option key={type.value} value={type.value}>
+                        {type.label}
+                      </option>
                     ))}
                   </select>
                 </div>
 
                 {/* Duration */}
                 <div>
-                  <label className="block text-sm font-medium text-deep-charcoal mb-2">Duration</label>
+                  <label className="block text-sm font-medium text-deep-charcoal mb-2">
+                    Duration
+                  </label>
                   <select
                     value={filters.duration}
-                    onChange={(e) => setFilters({...filters, duration: e.target.value})}
+                    onChange={(e) =>
+                      setFilters({ ...filters, duration: e.target.value })
+                    }
                     className="w-full px-3 py-2 border border-natural-blue/30 rounded-lg focus:border-natural-blue"
                   >
                     <option value="">Any Duration</option>
-                    {durations.map(duration => (
-                      <option key={duration.value} value={duration.value}>{duration.label}</option>
+                    {durations.map((duration) => (
+                      <option key={duration.value} value={duration.value}>
+                        {duration.label}
+                      </option>
                     ))}
                   </select>
                 </div>
@@ -244,24 +308,40 @@ const AdvancedTrips = () => {
                 {/* Price Range */}
                 <div>
                   <label className="block text-sm font-medium text-deep-charcoal mb-2">
-                    Price Range: ${filters.priceRange[0]} - ${filters.priceRange[1]}
+                    Price Range: ${filters.priceRange[0]} - $
+                    {filters.priceRange[1]}
                   </label>
                   <input
                     type="range"
                     min="0"
                     max="2000"
                     value={filters.priceRange[1]}
-                    onChange={(e) => setFilters({...filters, priceRange: [filters.priceRange[0], parseInt(e.target.value)]})}
+                    onChange={(e) =>
+                      setFilters({
+                        ...filters,
+                        priceRange: [
+                          filters.priceRange[0],
+                          parseInt(e.target.value),
+                        ],
+                      })
+                    }
                     className="w-full"
                   />
                 </div>
 
                 {/* Rating */}
                 <div>
-                  <label className="block text-sm font-medium text-deep-charcoal mb-2">Minimum Rating</label>
+                  <label className="block text-sm font-medium text-deep-charcoal mb-2">
+                    Minimum Rating
+                  </label>
                   <select
                     value={filters.rating}
-                    onChange={(e) => setFilters({...filters, rating: parseFloat(e.target.value)})}
+                    onChange={(e) =>
+                      setFilters({
+                        ...filters,
+                        rating: parseFloat(e.target.value),
+                      })
+                    }
                     className="w-full px-3 py-2 border border-natural-blue/30 rounded-lg focus:border-natural-blue"
                   >
                     <option value="0">Any Rating</option>
@@ -278,10 +358,15 @@ const AdvancedTrips = () => {
                   type="checkbox"
                   id="showCompleted"
                   checked={filters.showCompleted}
-                  onChange={(e) => setFilters({...filters, showCompleted: e.target.checked})}
+                  onChange={(e) =>
+                    setFilters({ ...filters, showCompleted: e.target.checked })
+                  }
                   className="w-4 h-4 text-natural-blue rounded focus:ring-natural-blue"
                 />
-                <label htmlFor="showCompleted" className="text-sm text-deep-charcoal">
+                <label
+                  htmlFor="showCompleted"
+                  className="text-sm text-deep-charcoal"
+                >
                   Show completed trips only
                 </label>
               </div>
@@ -299,9 +384,14 @@ const AdvancedTrips = () => {
                   Compare ({compareList.length}/3)
                 </span>
                 <div className="flex gap-2">
-                  {compareList.map(trip => (
-                    <div key={trip.id} className="flex items-center gap-1 bg-white px-3 py-1 rounded-full">
-                      <span className="text-sm">{trip.title.substring(0, 20)}...</span>
+                  {compareList.map((trip) => (
+                    <div
+                      key={trip.id}
+                      className="flex items-center gap-1 bg-white px-3 py-1 rounded-full"
+                    >
+                      <span className="text-sm">
+                        {trip.title.substring(0, 20)}...
+                      </span>
                       <button
                         onClick={() => removeFromCompare(trip.id)}
                         className="text-red-500 hover:text-red-700"
@@ -361,16 +451,18 @@ const AdvancedTrips = () => {
                   alt={trip.title}
                   className="w-full h-48 object-cover group-hover:scale-110 transition-transform duration-700"
                 />
-                
+
                 {/* Badges */}
                 <div className="absolute top-4 left-4 flex flex-col gap-2">
                   {trip.badges.map((badge, index) => (
                     <span
                       key={index}
                       className={`px-2 py-1 text-xs font-medium rounded-full ${
-                        badge === 'New' ? 'bg-green-500 text-white' :
-                        badge === 'Popular' ? 'bg-warm-orange text-deep-charcoal' :
-                        'bg-red-500 text-white'
+                        badge === "New"
+                          ? "bg-green-500 text-white"
+                          : badge === "Popular"
+                          ? "bg-warm-orange text-deep-charcoal"
+                          : "bg-red-500 text-white"
                       }`}
                     >
                       {badge}
@@ -441,10 +533,8 @@ const AdvancedTrips = () => {
                     <Users className="w-4 h-4 ml-2" />
                     <span>{trip.groupSize}</span>
                   </div>
-                  
-                  {trip.timeLeft && (
-                    <CountdownTimer timeLeft={trip.timeLeft} />
-                  )}
+
+                  {trip.timeLeft && <CountdownTimer timeLeft={trip.timeLeft} />}
                 </div>
 
                 {/* Price */}
@@ -458,7 +548,9 @@ const AdvancedTrips = () => {
                     <span className="text-2xl font-bold text-natural-blue">
                       ${trip.price}
                     </span>
-                    <span className="text-sm text-cool-gray ml-1">per person</span>
+                    <span className="text-sm text-cool-gray ml-1">
+                      per person
+                    </span>
                   </div>
                   <div className="text-right text-sm text-cool-gray">
                     {trip.reviews} reviews
@@ -493,7 +585,9 @@ const AdvancedTrips = () => {
           <div className="bg-white rounded-2xl max-w-6xl w-full max-h-[90vh] overflow-auto">
             <div className="p-6 border-b border-natural-blue/20">
               <div className="flex items-center justify-between">
-                <h2 className="text-2xl font-bold text-deep-charcoal">Compare Trips</h2>
+                <h2 className="text-2xl font-bold text-deep-charcoal">
+                  Compare Trips
+                </h2>
                 <button
                   onClick={() => setShowComparison(false)}
                   className="p-2 hover:bg-cool-gray/10 rounded-lg"
@@ -502,17 +596,25 @@ const AdvancedTrips = () => {
                 </button>
               </div>
             </div>
-            
+
             <div className="p-6">
               <div className="overflow-x-auto">
                 <table className="w-full">
                   <thead>
                     <tr>
-                      <th className="text-left p-4 font-medium text-deep-charcoal">Feature</th>
-                      {compareList.map(trip => (
+                      <th className="text-left p-4 font-medium text-deep-charcoal">
+                        Feature
+                      </th>
+                      {compareList.map((trip) => (
                         <th key={trip.id} className="text-center p-4">
-                          <img src={trip.image} alt={trip.title} className="w-20 h-20 object-cover rounded-lg mx-auto mb-2" />
-                          <div className="font-medium text-deep-charcoal">{trip.title}</div>
+                          <img
+                            src={trip.image}
+                            alt={trip.title}
+                            className="w-20 h-20 object-cover rounded-lg mx-auto mb-2"
+                          />
+                          <div className="font-medium text-deep-charcoal">
+                            {trip.title}
+                          </div>
                         </th>
                       ))}
                     </tr>
@@ -520,21 +622,25 @@ const AdvancedTrips = () => {
                   <tbody>
                     <tr className="border-t border-natural-blue/20">
                       <td className="p-4 font-medium">Price</td>
-                      {compareList.map(trip => (
+                      {compareList.map((trip) => (
                         <td key={trip.id} className="p-4 text-center">
-                          <span className="text-xl font-bold text-natural-blue">${trip.price}</span>
+                          <span className="text-xl font-bold text-natural-blue">
+                            ${trip.price}
+                          </span>
                         </td>
                       ))}
                     </tr>
                     <tr className="border-t border-natural-blue/20">
                       <td className="p-4 font-medium">Duration</td>
-                      {compareList.map(trip => (
-                        <td key={trip.id} className="p-4 text-center">{trip.duration}</td>
+                      {compareList.map((trip) => (
+                        <td key={trip.id} className="p-4 text-center">
+                          {trip.duration}
+                        </td>
                       ))}
                     </tr>
                     <tr className="border-t border-natural-blue/20">
                       <td className="p-4 font-medium">Rating</td>
-                      {compareList.map(trip => (
+                      {compareList.map((trip) => (
                         <td key={trip.id} className="p-4 text-center">
                           <div className="flex items-center justify-center gap-1">
                             <Star className="w-4 h-4 text-warm-orange fill-current" />
@@ -545,8 +651,10 @@ const AdvancedTrips = () => {
                     </tr>
                     <tr className="border-t border-natural-blue/20">
                       <td className="p-4 font-medium">Group Size</td>
-                      {compareList.map(trip => (
-                        <td key={trip.id} className="p-4 text-center">{trip.groupSize}</td>
+                      {compareList.map((trip) => (
+                        <td key={trip.id} className="p-4 text-center">
+                          {trip.groupSize}
+                        </td>
                       ))}
                     </tr>
                   </tbody>

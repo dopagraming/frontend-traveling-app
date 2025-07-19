@@ -33,6 +33,7 @@ const Trips = () => {
   }, [allTrips, location.state]);
 
   const handleSearch = async () => {
+    console.log("here in handle search");
     if (!searchTerm.trim()) {
       setTrips(allTrips);
       return;

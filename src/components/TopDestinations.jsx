@@ -8,6 +8,7 @@ import api from "../lib/axios";
 import { addToWishlist } from "../rtk/features/wishlistSlice";
 
 const TopDestinations = () => {
+  // const { data: allTrips, isLoading, error } = useGetItems("trips");
   const { t } = useTranslation();
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -47,44 +48,6 @@ const TopDestinations = () => {
       } catch (error) {
         console.error("Error fetching popular destinations:", error);
         setError("Failed to load destinations");
-
-        // Fallback to static data if API fails
-        // const fallbackDestinations = [
-        //   {
-        //     id: 1,
-        //     name: "Santorini, Greece",
-        //     image:
-        //       "https://images.unsplash.com/photo-1570077188670-e3a8d69ac5ff?w=500&h=300&fit=crop",
-        //     rating: 4.9,
-        //     reviews: 2847,
-        //     price: "$299",
-        //     description: "Stunning sunsets and white-washed buildings",
-        //     category: "Island Paradise",
-        //   },
-        //   {
-        //     id: 2,
-        //     name: "Kyoto, Japan",
-        //     image:
-        //       "https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?w=500&h=300&fit=crop",
-        //     rating: 4.8,
-        //     reviews: 1923,
-        //     price: "$399",
-        //     description: "Ancient temples and cherry blossoms",
-        //     category: "Cultural Heritage",
-        //   },
-        //   {
-        //     id: 3,
-        //     name: "Machu Picchu, Peru",
-        //     image:
-        //       "https://images.unsplash.com/photo-1587595431973-160d0d94add1?w=500&h=300&fit=crop",
-        //     rating: 4.9,
-        //     reviews: 3156,
-        //     price: "$599",
-        //     description: "Mystical ancient Incan citadel",
-        //     category: "Adventure",
-        //   },
-        // ];
-        // setDestinations(fallbackDestinations);
       } finally {
         setLoading(false);
       }
@@ -158,7 +121,7 @@ const TopDestinations = () => {
           </div>
 
           {/* Loading Skeleton */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
             {[1, 2, 3, 4, 5, 6].map((i) => (
               <div
                 key={i}
@@ -219,8 +182,7 @@ const TopDestinations = () => {
           </p>
         </div>
 
-        {/* Destinations Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
           {destinations.map((destination) => (
             <div
               key={destination.id}

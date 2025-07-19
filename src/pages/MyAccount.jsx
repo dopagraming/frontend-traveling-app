@@ -1,12 +1,12 @@
-import React, { useState } from 'react';
-import { 
-  Calendar, 
-  MapPin, 
-  Star, 
-  Award, 
-  Camera, 
-  Edit3, 
-  Share2, 
+import React, { useState } from "react";
+import {
+  Calendar,
+  MapPin,
+  Star,
+  Award,
+  Camera,
+  Edit3,
+  Share2,
   Download,
   Clock,
   CheckCircle,
@@ -16,23 +16,16 @@ import {
   Trophy,
   Heart,
   Settings,
-  User
-} from 'lucide-react';
+  User,
+} from "lucide-react";
+import { useSelector } from "react-redux";
 
 const MyAccount = () => {
-  const [activeTab, setActiveTab] = useState('bookings');
+  const [activeTab, setActiveTab] = useState("bookings");
   const [editingReview, setEditingReview] = useState(null);
 
-  // Mock user data
-  const user = {
-    name: "Sarah Johnson",
-    email: "sarah.johnson@email.com",
-    avatar: "https://images.unsplash.com/photo-1494790108755-2616b612b786?w=150&h=150&fit=crop&crop=face",
-    memberSince: "2022",
-    totalTrips: 12,
-    points: 2450,
-    level: "Gold Explorer"
-  };
+  const user = useSelector((state) => state.user.user);
+  console.log(user);
 
   // Mock bookings data
   const bookings = [
@@ -43,9 +36,10 @@ const MyAccount = () => {
       date: "2024-03-15",
       status: "confirmed",
       price: 299,
-      image: "https://images.unsplash.com/photo-1539650116574-8efeb43e2750?w=300&h=200&fit=crop",
+      image:
+        "https://images.unsplash.com/photo-1539650116574-8efeb43e2750?w=300&h=200&fit=crop",
       bookingRef: "TRV001234",
-      travelers: 2
+      travelers: 2,
     },
     {
       id: 2,
@@ -54,9 +48,10 @@ const MyAccount = () => {
       date: "2024-02-20",
       status: "completed",
       price: 199,
-      image: "https://images.unsplash.com/photo-1451337516015-6b6e9a44a8a3?w=300&h=200&fit=crop",
+      image:
+        "https://images.unsplash.com/photo-1451337516015-6b6e9a44a8a3?w=300&h=200&fit=crop",
       bookingRef: "TRV001235",
-      travelers: 1
+      travelers: 1,
     },
     {
       id: 3,
@@ -65,10 +60,11 @@ const MyAccount = () => {
       date: "2024-04-10",
       status: "pending",
       price: 1299,
-      image: "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=300&h=200&fit=crop",
+      image:
+        "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=300&h=200&fit=crop",
       bookingRef: "TRV001236",
-      travelers: 2
-    }
+      travelers: 2,
+    },
   ];
 
   // Mock reviews data
@@ -77,20 +73,24 @@ const MyAccount = () => {
       id: 1,
       tripTitle: "Desert Adventure",
       rating: 5,
-      comment: "Amazing experience! The guides were knowledgeable and the desert sunset was breathtaking. Highly recommended for adventure seekers.",
+      comment:
+        "Amazing experience! The guides were knowledgeable and the desert sunset was breathtaking. Highly recommended for adventure seekers.",
       date: "2024-02-25",
       helpful: 12,
-      photos: ["https://images.unsplash.com/photo-1451337516015-6b6e9a44a8a3?w=200&h=150&fit=crop"]
+      photos: [
+        "https://images.unsplash.com/photo-1451337516015-6b6e9a44a8a3?w=200&h=150&fit=crop",
+      ],
     },
     {
       id: 2,
       tripTitle: "City Walking Tour",
       rating: 4,
-      comment: "Great tour with lots of historical insights. The guide was friendly and accommodating.",
+      comment:
+        "Great tour with lots of historical insights. The guide was friendly and accommodating.",
       date: "2024-01-18",
       helpful: 8,
-      photos: []
-    }
+      photos: [],
+    },
   ];
 
   // Mock shared trips data
@@ -98,35 +98,46 @@ const MyAccount = () => {
     {
       id: 1,
       title: "My Amazing Egypt Adventure",
-      description: "Just returned from an incredible journey through ancient Egypt. The pyramids were even more magnificent in person!",
+      description:
+        "Just returned from an incredible journey through ancient Egypt. The pyramids were even more magnificent in person!",
       photos: [
         "https://images.unsplash.com/photo-1539650116574-8efeb43e2750?w=200&h=150&fit=crop",
         "https://images.unsplash.com/photo-1553913861-c0fddf2619ee?w=200&h=150&fit=crop",
-        "https://images.unsplash.com/photo-1568322445389-f64ac2515020?w=200&h=150&fit=crop"
+        "https://images.unsplash.com/photo-1568322445389-f64ac2515020?w=200&h=150&fit=crop",
       ],
       likes: 24,
       comments: 8,
-      date: "2024-02-28"
-    }
+      date: "2024-02-28",
+    },
   ];
 
   const getStatusColor = (status) => {
     switch (status) {
-      case 'confirmed': return 'text-green-600 bg-green-100';
-      case 'pending': return 'text-yellow-600 bg-yellow-100';
-      case 'completed': return 'text-blue-600 bg-blue-100';
-      case 'cancelled': return 'text-red-600 bg-red-100';
-      default: return 'text-gray-600 bg-gray-100';
+      case "confirmed":
+        return "text-green-600 bg-green-100";
+      case "pending":
+        return "text-yellow-600 bg-yellow-100";
+      case "completed":
+        return "text-blue-600 bg-blue-100";
+      case "cancelled":
+        return "text-red-600 bg-red-100";
+      default:
+        return "text-gray-600 bg-gray-100";
     }
   };
 
   const getStatusIcon = (status) => {
     switch (status) {
-      case 'confirmed': return <CheckCircle className="w-4 h-4" />;
-      case 'pending': return <Clock className="w-4 h-4" />;
-      case 'completed': return <CheckCircle className="w-4 h-4" />;
-      case 'cancelled': return <AlertCircle className="w-4 h-4" />;
-      default: return <Clock className="w-4 h-4" />;
+      case "confirmed":
+        return <CheckCircle className="w-4 h-4" />;
+      case "pending":
+        return <Clock className="w-4 h-4" />;
+      case "completed":
+        return <CheckCircle className="w-4 h-4" />;
+      case "cancelled":
+        return <AlertCircle className="w-4 h-4" />;
+      default:
+        return <Clock className="w-4 h-4" />;
     }
   };
 
@@ -137,20 +148,20 @@ const MyAccount = () => {
         <div className="container mx-auto px-4">
           <div className="flex items-center gap-6">
             <img
-              src={user.avatar}
-              alt={user.name}
+              src={user?.avatar}
+              alt={user?.name}
               className="w-24 h-24 rounded-full border-4 border-white/20"
             />
             <div>
-              <h1 className="text-3xl font-bold mb-2">{user.name}</h1>
-              <p className="text-white/80 mb-2">{user.email}</p>
+              <h1 className="text-3xl font-bold mb-2">{user?.name}</h1>
+              <p className="text-white/80 mb-2">{user?.email}</p>
               <div className="flex items-center gap-4 text-sm">
                 <span className="flex items-center gap-1">
                   <Award className="w-4 h-4" />
-                  {user.level}
+                  {user?.level}
                 </span>
-                <span>Member since {user.memberSince}</span>
-                <span>{user.totalTrips} trips completed</span>
+                <span>Member since {user?.memberSince}</span>
+                <span>{user?.totalTrips} trips completed</span>
               </div>
             </div>
           </div>
@@ -165,7 +176,9 @@ const MyAccount = () => {
               {/* Points & Rewards */}
               <div className="text-center mb-6 p-4 bg-warm-orange/10 rounded-xl">
                 <Trophy className="w-8 h-8 text-warm-orange mx-auto mb-2" />
-                <div className="text-2xl font-bold text-deep-charcoal">{user.points}</div>
+                <div className="text-2xl font-bold text-deep-charcoal">
+                  {user?.points}
+                </div>
                 <div className="text-sm text-cool-gray">Reward Points</div>
                 <button className="mt-2 text-sm text-warm-orange hover:text-warm-orange-dark">
                   Redeem Points
@@ -175,47 +188,47 @@ const MyAccount = () => {
               {/* Navigation */}
               <nav className="space-y-2">
                 <button
-                  onClick={() => setActiveTab('bookings')}
+                  onClick={() => setActiveTab("bookings")}
                   className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg text-left transition-colors ${
-                    activeTab === 'bookings' 
-                      ? 'bg-natural-blue text-white' 
-                      : 'text-deep-charcoal hover:bg-natural-blue/10'
+                    activeTab === "bookings"
+                      ? "bg-natural-blue text-white"
+                      : "text-deep-charcoal hover:bg-natural-blue/10"
                   }`}
                 >
                   <Calendar className="w-5 h-5" />
                   My Bookings
                 </button>
-                
+
                 <button
-                  onClick={() => setActiveTab('reviews')}
+                  onClick={() => setActiveTab("reviews")}
                   className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg text-left transition-colors ${
-                    activeTab === 'reviews' 
-                      ? 'bg-natural-blue text-white' 
-                      : 'text-deep-charcoal hover:bg-natural-blue/10'
+                    activeTab === "reviews"
+                      ? "bg-natural-blue text-white"
+                      : "text-deep-charcoal hover:bg-natural-blue/10"
                   }`}
                 >
                   <Star className="w-5 h-5" />
                   My Reviews
                 </button>
-                
+
                 <button
-                  onClick={() => setActiveTab('shared')}
+                  onClick={() => setActiveTab("shared")}
                   className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg text-left transition-colors ${
-                    activeTab === 'shared' 
-                      ? 'bg-natural-blue text-white' 
-                      : 'text-deep-charcoal hover:bg-natural-blue/10'
+                    activeTab === "shared"
+                      ? "bg-natural-blue text-white"
+                      : "text-deep-charcoal hover:bg-natural-blue/10"
                   }`}
                 >
                   <Share2 className="w-5 h-5" />
                   Shared Trips
                 </button>
-                
+
                 <button
-                  onClick={() => setActiveTab('profile')}
+                  onClick={() => setActiveTab("profile")}
                   className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg text-left transition-colors ${
-                    activeTab === 'profile' 
-                      ? 'bg-natural-blue text-white' 
-                      : 'text-deep-charcoal hover:bg-natural-blue/10'
+                    activeTab === "profile"
+                      ? "bg-natural-blue text-white"
+                      : "text-deep-charcoal hover:bg-natural-blue/10"
                   }`}
                 >
                   <User className="w-5 h-5" />
@@ -228,10 +241,12 @@ const MyAccount = () => {
           {/* Main Content */}
           <div className="lg:col-span-3">
             {/* Bookings Tab */}
-            {activeTab === 'bookings' && (
+            {activeTab === "bookings" && (
               <div className="space-y-6">
                 <div className="flex items-center justify-between">
-                  <h2 className="text-2xl font-bold text-deep-charcoal">My Bookings</h2>
+                  <h2 className="text-2xl font-bold text-deep-charcoal">
+                    My Bookings
+                  </h2>
                   <div className="flex gap-2">
                     <select className="px-4 py-2 border border-natural-blue/30 rounded-lg">
                       <option>All Bookings</option>
@@ -243,7 +258,10 @@ const MyAccount = () => {
                 </div>
 
                 {bookings.map((booking) => (
-                  <div key={booking.id} className="bg-white rounded-2xl shadow-soft overflow-hidden">
+                  <div
+                    key={booking.id}
+                    className="bg-white rounded-2xl shadow-soft overflow-hidden"
+                  >
                     <div className="md:flex">
                       <div className="md:w-1/3">
                         <img
@@ -264,10 +282,16 @@ const MyAccount = () => {
                             </div>
                             <div className="flex items-center gap-2 text-cool-gray">
                               <Calendar className="w-4 h-4" />
-                              <span>{new Date(booking.date).toLocaleDateString()}</span>
+                              <span>
+                                {new Date(booking.date).toLocaleDateString()}
+                              </span>
                             </div>
                           </div>
-                          <div className={`flex items-center gap-1 px-3 py-1 rounded-full text-sm font-medium ${getStatusColor(booking.status)}`}>
+                          <div
+                            className={`flex items-center gap-1 px-3 py-1 rounded-full text-sm font-medium ${getStatusColor(
+                              booking.status
+                            )}`}
+                          >
                             {getStatusIcon(booking.status)}
                             <span className="capitalize">{booking.status}</span>
                           </div>
@@ -276,19 +300,27 @@ const MyAccount = () => {
                         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-4 text-sm">
                           <div>
                             <span className="text-cool-gray">Booking Ref:</span>
-                            <div className="font-medium">{booking.bookingRef}</div>
+                            <div className="font-medium">
+                              {booking.bookingRef}
+                            </div>
                           </div>
                           <div>
                             <span className="text-cool-gray">Travelers:</span>
-                            <div className="font-medium">{booking.travelers}</div>
+                            <div className="font-medium">
+                              {booking.travelers}
+                            </div>
                           </div>
                           <div>
                             <span className="text-cool-gray">Total Paid:</span>
-                            <div className="font-medium text-natural-blue">${booking.price}</div>
+                            <div className="font-medium text-natural-blue">
+                              ${booking.price}
+                            </div>
                           </div>
                           <div>
                             <span className="text-cool-gray">Payment:</span>
-                            <div className="font-medium text-green-600">Completed</div>
+                            <div className="font-medium text-green-600">
+                              Completed
+                            </div>
                           </div>
                         </div>
 
@@ -300,7 +332,7 @@ const MyAccount = () => {
                             <Download className="w-4 h-4 inline mr-2" />
                             Download
                           </button>
-                          {booking.status === 'completed' && (
+                          {booking.status === "completed" && (
                             <button className="px-4 py-2 border border-warm-orange text-warm-orange rounded-lg hover:bg-warm-orange hover:text-deep-charcoal transition-colors">
                               Write Review
                             </button>
@@ -314,17 +346,22 @@ const MyAccount = () => {
             )}
 
             {/* Reviews Tab */}
-            {activeTab === 'reviews' && (
+            {activeTab === "reviews" && (
               <div className="space-y-6">
                 <div className="flex items-center justify-between">
-                  <h2 className="text-2xl font-bold text-deep-charcoal">My Reviews</h2>
+                  <h2 className="text-2xl font-bold text-deep-charcoal">
+                    My Reviews
+                  </h2>
                   <button className="px-4 py-2 bg-warm-orange text-deep-charcoal rounded-lg hover:bg-warm-orange-dark transition-colors">
                     Write New Review
                   </button>
                 </div>
 
                 {reviews.map((review) => (
-                  <div key={review.id} className="bg-white rounded-2xl shadow-soft p-6">
+                  <div
+                    key={review.id}
+                    className="bg-white rounded-2xl shadow-soft p-6"
+                  >
                     <div className="flex items-start justify-between mb-4">
                       <div>
                         <h3 className="text-lg font-bold text-deep-charcoal mb-2">
@@ -336,7 +373,9 @@ const MyAccount = () => {
                               <Star
                                 key={i}
                                 className={`w-4 h-4 ${
-                                  i < review.rating ? 'text-warm-orange fill-current' : 'text-gray-300'
+                                  i < review.rating
+                                    ? "text-warm-orange fill-current"
+                                    : "text-gray-300"
                                 }`}
                               />
                             ))}
@@ -386,10 +425,12 @@ const MyAccount = () => {
             )}
 
             {/* Shared Trips Tab */}
-            {activeTab === 'shared' && (
+            {activeTab === "shared" && (
               <div className="space-y-6">
                 <div className="flex items-center justify-between">
-                  <h2 className="text-2xl font-bold text-deep-charcoal">Shared Trips</h2>
+                  <h2 className="text-2xl font-bold text-deep-charcoal">
+                    Shared Trips
+                  </h2>
                   <button className="px-4 py-2 bg-warm-orange text-deep-charcoal rounded-lg hover:bg-warm-orange-dark transition-colors">
                     <Camera className="w-4 h-4 inline mr-2" />
                     Share New Trip
@@ -397,13 +438,18 @@ const MyAccount = () => {
                 </div>
 
                 {sharedTrips.map((trip) => (
-                  <div key={trip.id} className="bg-white rounded-2xl shadow-soft p-6">
+                  <div
+                    key={trip.id}
+                    className="bg-white rounded-2xl shadow-soft p-6"
+                  >
                     <div className="flex items-start justify-between mb-4">
                       <div>
                         <h3 className="text-xl font-bold text-deep-charcoal mb-2">
                           {trip.title}
                         </h3>
-                        <p className="text-cool-gray mb-4">{trip.description}</p>
+                        <p className="text-cool-gray mb-4">
+                          {trip.description}
+                        </p>
                       </div>
                       <span className="text-sm text-cool-gray">
                         {new Date(trip.date).toLocaleDateString()}
@@ -444,12 +490,16 @@ const MyAccount = () => {
             )}
 
             {/* Profile Settings Tab */}
-            {activeTab === 'profile' && (
+            {activeTab === "profile" && (
               <div className="space-y-6">
-                <h2 className="text-2xl font-bold text-deep-charcoal">Profile Settings</h2>
-                
+                <h2 className="text-2xl font-bold text-deep-charcoal">
+                  Profile Settings
+                </h2>
+
                 <div className="bg-white rounded-2xl shadow-soft p-6">
-                  <h3 className="text-lg font-semibold text-deep-charcoal mb-4">Personal Information</h3>
+                  <h3 className="text-lg font-semibold text-deep-charcoal mb-4">
+                    Personal Information
+                  </h3>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div>
                       <label className="block text-sm font-medium text-deep-charcoal mb-2">
@@ -457,7 +507,7 @@ const MyAccount = () => {
                       </label>
                       <input
                         type="text"
-                        value={user.name}
+                        value={user?.name}
                         className="w-full px-4 py-3 border border-natural-blue/30 rounded-lg focus:border-natural-blue focus:ring-2 focus:ring-natural-blue/20"
                       />
                     </div>
@@ -497,19 +547,38 @@ const MyAccount = () => {
                 </div>
 
                 <div className="bg-white rounded-2xl shadow-soft p-6">
-                  <h3 className="text-lg font-semibold text-deep-charcoal mb-4">Preferences</h3>
+                  <h3 className="text-lg font-semibold text-deep-charcoal mb-4">
+                    Preferences
+                  </h3>
                   <div className="space-y-4">
                     <div className="flex items-center justify-between">
-                      <span className="text-deep-charcoal">Email Notifications</span>
-                      <input type="checkbox" className="w-5 h-5 text-natural-blue rounded" defaultChecked />
+                      <span className="text-deep-charcoal">
+                        Email Notifications
+                      </span>
+                      <input
+                        type="checkbox"
+                        className="w-5 h-5 text-natural-blue rounded"
+                        defaultChecked
+                      />
                     </div>
                     <div className="flex items-center justify-between">
-                      <span className="text-deep-charcoal">SMS Notifications</span>
-                      <input type="checkbox" className="w-5 h-5 text-natural-blue rounded" />
+                      <span className="text-deep-charcoal">
+                        SMS Notifications
+                      </span>
+                      <input
+                        type="checkbox"
+                        className="w-5 h-5 text-natural-blue rounded"
+                      />
                     </div>
                     <div className="flex items-center justify-between">
-                      <span className="text-deep-charcoal">Marketing Communications</span>
-                      <input type="checkbox" className="w-5 h-5 text-natural-blue rounded" defaultChecked />
+                      <span className="text-deep-charcoal">
+                        Marketing Communications
+                      </span>
+                      <input
+                        type="checkbox"
+                        className="w-5 h-5 text-natural-blue rounded"
+                        defaultChecked
+                      />
                     </div>
                   </div>
                 </div>
