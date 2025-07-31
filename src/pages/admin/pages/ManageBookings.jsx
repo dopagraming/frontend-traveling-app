@@ -72,7 +72,7 @@ export default function ManageBookings() {
         <div className="flex items-center justify-between mb-6">
           <div className="flex items-center gap-4">
             <Link
-              to="/admin"
+              to="/"
               className="p-2 bg-white rounded-lg shadow-soft hover:shadow-blue transition-all"
             >
               <ChevronLeft className="h-5 w-5 text-natural-blue" />

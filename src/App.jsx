@@ -12,7 +12,6 @@ import AdvancedTrips from "./pages/AdvancedTrips";
 import TripDetails from "./pages/TripDetails";
 import Booking from "./pages/Booking";
 import Contact from "./pages/Contact";
-import AdminDashboard from "./pages/admin/Dashboard";
 import Wishlist from "./pages/Wishlist";
 import Cart from "./pages/Cart";
 import MyAccount from "./pages/MyAccount";
@@ -32,7 +31,13 @@ import ManageCategories from "./pages/admin/pages/ManageCategories";
 import { useDispatch } from "react-redux";
 import { setAuthChecked, setUser } from "./rtk/features/userSlice";
 import api from "./lib/axios";
-
+import Overview from "./pages/admin/pages/Overview";
+import DashboardLayout from "./components/DashboardLayout";
+import CompanyProfile from "./pages/admin/pages/CompanyProfile";
+import CompaniesList from "./pages/admin/companies";
+import CompanyForm from "./pages/admin/companies/new";
+import CompanyDetails from "./pages/admin/companies/[id]";
+import CompanyEdit from "./pages/admin/companies/[id]/edit";
 const queryClient = new QueryClient();
 
 function App() {
@@ -98,54 +103,43 @@ function App() {
 
               {/* Admin Routes */}
               <Route
-                path="/admin"
+                path="/admin-dashboard"
                 element={
                   <RequireAuth>
-                    <AdminDashboard />
+                    {/* we will get the role from the user */}
+                    <DashboardLayout role="admin" />
                   </RequireAuth>
                 }
-              />
-              <Route
-                path="/admin/categories"
-                element={
-                  <RequireAuth>
-                    <ManageCategories />
-                  </RequireAuth>
-                }
-              />
-              <Route
-                path="/admin/users"
-                element={
-                  <RequireAuth>
-                    <ManageUsers />
-                  </RequireAuth>
-                }
-              />
-              <Route
-                path="/admin/bookings"
-                element={
-                  <RequireAuth>
-                    <ManageBookings />
-                  </RequireAuth>
-                }
-              />
-              <Route
-                path="/admin/trips"
-                element={
-                  <RequireAuth>
-                    <ManageTrips />
-                  </RequireAuth>
-                }
-              />
-              <Route
-                path="/admin/payments"
-                element={
-                  <RequireAuth>
-                    <Payments />
-                  </RequireAuth>
-                }
-              />
+              >
+                <Route index element={<Overview />} />
+                <Route path="categories" element={<ManageCategories />} />
+                <Route path="users" element={<ManageUsers />} />
+                <Route path="bookings" element={<ManageBookings />} />
+                <Route path="trips" element={<ManageTrips />} />
+                <Route path="payments" element={<Payments />} />
+                <Route path="companies" element={<CompaniesList />} />
+                <Route path="companies/new" element={<CompanyForm />} />
+                <Route path="companies/:id" element={<CompanyDetails />} />
+                <Route path="companies/:id/edit" element={<CompanyForm />} />
+              </Route>
 
+              <Route
+                path="/company-dashboard"
+                element={
+                  <RequireAuth>
+                    <DashboardLayout role="company" />
+                  </RequireAuth>
+                }
+              >
+                <Route index element={<Overview />} />
+
+                <Route path="categories" element={<ManageCategories />} />
+                <Route path="users" element={<ManageUsers />} />
+                <Route path="bookings" element={<ManageBookings />} />
+                <Route path="trips" element={<ManageTrips />} />
+                <Route path="payments" element={<Payments />} />
+                <Route path="profile" element={<CompanyProfile />} />
+              </Route>
               {/* Legacy signin route for backward compatibility */}
               <Route path="/signin" element={<SignIn />} />
 

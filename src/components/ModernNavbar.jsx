@@ -31,7 +31,9 @@ const ModernNavbar = () => {
   }, []);
 
   const isAdminRoute =
-    location.pathname.startsWith("/admin") || location.pathname === "/signin";
+    location.pathname.startsWith("/admin") ||
+    location.pathname === "/signin" ||
+    location.pathname.startsWith("/company");
 
   if (isAdminRoute) return null;
 

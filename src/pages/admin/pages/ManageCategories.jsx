@@ -1,6 +1,13 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import { PlusCircle, Search, ChevronLeft, Edit, Trash2, Tag } from "lucide-react";
+import {
+  PlusCircle,
+  Search,
+  ChevronLeft,
+  Edit,
+  Trash2,
+  Tag,
+} from "lucide-react";
 import useGetItmes from "../../../hooks/useGetProducts";
 import DeleteConfirmationModal from "../models/DeleteConfirmationModal";
 import useModalState from "../../../hooks/useModalState";
@@ -17,11 +24,11 @@ export default function ManageCategories() {
     handleDelete,
     handleAdd,
   } = useModalState();
-  
+
   const { data, isLoading, error, refetch } = useGetItmes("categories");
   const [searchTerm, setSearchTerm] = useState("");
 
-  const filteredCategories = data?.filter(category => 
+  const filteredCategories = data?.filter((category) =>
     category.title?.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
@@ -32,7 +39,9 @@ export default function ManageCategories() {
           <div className="flex justify-center">
             <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-natural-blue"></div>
           </div>
-          <p className="text-center mt-4 text-cool-gray">Loading categories...</p>
+          <p className="text-center mt-4 text-cool-gray">
+            Loading categories...
+          </p>
         </div>
       </div>
     );
@@ -56,12 +65,17 @@ export default function ManageCategories() {
       <div className="container mx-auto py-8 px-4">
         <div className="flex items-center justify-between mb-6">
           <div className="flex items-center gap-4">
-            <Link to="/admin" className="p-2 bg-white rounded-lg shadow-soft hover:shadow-blue transition-all">
+            <Link
+              to="/admin-dashboard"
+              className="p-2 bg-white rounded-lg shadow-soft hover:shadow-blue transition-all"
+            >
               <ChevronLeft className="h-5 w-5 text-natural-blue" />
             </Link>
-            <h1 className="text-2xl font-bold text-deep-charcoal">Manage Categories</h1>
+            <h1 className="text-2xl font-bold text-deep-charcoal">
+              Manage Categories
+            </h1>
           </div>
-          
+
           <button
             onClick={handleAdd}
             className="flex items-center gap-2 px-4 py-2 bg-natural-blue text-white rounded-lg hover:bg-natural-blue-dark transition-colors shadow-soft"
@@ -87,17 +101,22 @@ export default function ManageCategories() {
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {filteredCategories?.map((category) => (
-              <div key={category._id} className="bg-soft-sand rounded-xl shadow-soft overflow-hidden hover:shadow-blue transition-all duration-300">
+              <div
+                key={category._id}
+                className="bg-soft-sand rounded-xl shadow-soft overflow-hidden hover:shadow-blue transition-all duration-300"
+              >
                 <div className="p-6">
                   <div className="flex items-center justify-between mb-4">
                     <div className="flex items-center gap-3">
                       <div className="p-3 bg-natural-blue/10 rounded-lg">
                         <Tag className="h-5 w-5 text-natural-blue" />
                       </div>
-                      <h3 className="text-lg font-bold text-deep-charcoal">{category.title}</h3>
+                      <h3 className="text-lg font-bold text-deep-charcoal">
+                        {category.title}
+                      </h3>
                     </div>
                   </div>
-                  
+
                   <div className="flex justify-between gap-2 mt-4">
                     <button
                       onClick={() => handleEdit(category)}
@@ -116,7 +135,7 @@ export default function ManageCategories() {
               </div>
             ))}
           </div>
-          
+
           {filteredCategories?.length === 0 && (
             <div className="text-center py-12">
               <p className="text-cool-gray">No categories found</p>
@@ -133,7 +152,7 @@ export default function ManageCategories() {
         model={"categories"}
         doc={selectedItem}
       />
-      
+
       <AddCategoryModel
         isOpen={isOpen}
         onClose={onClose}

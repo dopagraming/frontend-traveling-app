@@ -13,13 +13,13 @@ import {
   Tag,
   Clock,
   Compass,
-  LogOut
+  LogOut,
 } from "lucide-react";
 import { useDispatch } from "react-redux";
 import { logout } from "../../rtk/features/userSlice";
 import { toast } from "react-hot-toast";
 
-const AdminDashboard = () => {
+const Dashboard = () => {
   const [activeTab, setActiveTab] = useState("dashboard");
   const dispatch = useDispatch();
 
@@ -39,9 +39,9 @@ const AdminDashboard = () => {
             </div>
             <span className="text-xl font-bold">Wanderlust</span>
           </div>
-          
+
           <nav className="space-y-1">
-            <button 
+            <button
               onClick={() => setActiveTab("dashboard")}
               className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg text-left transition-colors ${
                 activeTab === "dashboard" ? "bg-white/20" : "hover:bg-white/10"
@@ -50,36 +50,51 @@ const AdminDashboard = () => {
               <BarChart2 className="w-5 h-5" />
               <span>Dashboard</span>
             </button>
-            
-            <Link to="/admin/categories" className="w-full flex items-center gap-3 px-4 py-3 rounded-lg text-left transition-colors hover:bg-white/10">
+
+            <Link
+              to="/categories"
+              className="w-full flex items-center gap-3 px-4 py-3 rounded-lg text-left transition-colors hover:bg-white/10"
+            >
               <Tag className="w-5 h-5" />
               <span>Categories</span>
             </Link>
-            
-            <Link to="/admin/trips" className="w-full flex items-center gap-3 px-4 py-3 rounded-lg text-left transition-colors hover:bg-white/10">
+
+            <Link
+              to="/trips"
+              className="w-full flex items-center gap-3 px-4 py-3 rounded-lg text-left transition-colors hover:bg-white/10"
+            >
               <Map className="w-5 h-5" />
               <span>Trips</span>
             </Link>
-            
-            <Link to="/admin/bookings" className="w-full flex items-center gap-3 px-4 py-3 rounded-lg text-left transition-colors hover:bg-white/10">
+
+            <Link
+              to="/bookings"
+              className="w-full flex items-center gap-3 px-4 py-3 rounded-lg text-left transition-colors hover:bg-white/10"
+            >
               <Calendar className="w-5 h-5" />
               <span>Bookings</span>
             </Link>
-            
-            <Link to="/admin/users" className="w-full flex items-center gap-3 px-4 py-3 rounded-lg text-left transition-colors hover:bg-white/10">
+
+            <Link
+              to="/users"
+              className="w-full flex items-center gap-3 px-4 py-3 rounded-lg text-left transition-colors hover:bg-white/10"
+            >
               <Users className="w-5 h-5" />
               <span>Users</span>
             </Link>
-            
-            <Link to="/admin/payments" className="w-full flex items-center gap-3 px-4 py-3 rounded-lg text-left transition-colors hover:bg-white/10">
+
+            <Link
+              to="/payments"
+              className="w-full flex items-center gap-3 px-4 py-3 rounded-lg text-left transition-colors hover:bg-white/10"
+            >
               <CreditCard className="w-5 h-5" />
               <span>Payments</span>
             </Link>
           </nav>
         </div>
-        
+
         <div className="border-t border-white/10 p-6 mt-auto">
-          <button 
+          <button
             onClick={handleLogout}
             className="w-full flex items-center gap-3 px-4 py-3 rounded-lg text-left text-white/80 hover:bg-white/10 transition-colors"
           >
@@ -93,7 +108,9 @@ const AdminDashboard = () => {
       <div className="flex-1 overflow-auto">
         <header className="bg-white shadow-sm border-b border-gray-200 p-4">
           <div className="flex justify-between items-center">
-            <h1 className="text-2xl font-bold text-deep-charcoal">Admin Dashboard</h1>
+            <h1 className="text-2xl font-bold text-deep-charcoal">
+              Admin Dashboard
+            </h1>
             <div className="flex items-center gap-4">
               <button className="p-2 rounded-full hover:bg-gray-100">
                 <Settings className="h-5 w-5 text-cool-gray" />
@@ -113,50 +130,65 @@ const AdminDashboard = () => {
                 <div className="p-3 bg-natural-blue/10 rounded-lg">
                   <Users className="h-6 w-6 text-natural-blue" />
                 </div>
-                <span className="text-xs font-medium text-natural-blue bg-natural-blue/10 px-2 py-1 rounded-full">+12%</span>
+                <span className="text-xs font-medium text-natural-blue bg-natural-blue/10 px-2 py-1 rounded-full">
+                  +12%
+                </span>
               </div>
               <h3 className="text-2xl font-bold text-deep-charcoal">5,678</h3>
               <p className="text-cool-gray">Active Users</p>
             </div>
-            
+
             <div className="bg-white rounded-xl shadow-soft p-6">
               <div className="flex items-center justify-between mb-4">
                 <div className="p-3 bg-warm-orange/10 rounded-lg">
                   <Calendar className="h-6 w-6 text-warm-orange" />
                 </div>
-                <span className="text-xs font-medium text-warm-orange bg-warm-orange/10 px-2 py-1 rounded-full">+24%</span>
+                <span className="text-xs font-medium text-warm-orange bg-warm-orange/10 px-2 py-1 rounded-full">
+                  +24%
+                </span>
               </div>
               <h3 className="text-2xl font-bold text-deep-charcoal">1,234</h3>
               <p className="text-cool-gray">Total Bookings</p>
             </div>
-            
+
             <div className="bg-white rounded-xl shadow-soft p-6">
               <div className="flex items-center justify-between mb-4">
                 <div className="p-3 bg-gentle-olive/10 rounded-lg">
                   <Package className="h-6 w-6 text-gentle-olive" />
                 </div>
-                <span className="text-xs font-medium text-gentle-olive bg-gentle-olive/10 px-2 py-1 rounded-full">+8%</span>
+                <span className="text-xs font-medium text-gentle-olive bg-gentle-olive/10 px-2 py-1 rounded-full">
+                  +8%
+                </span>
               </div>
               <h3 className="text-2xl font-bold text-deep-charcoal">24</h3>
               <p className="text-cool-gray">Active Trips</p>
             </div>
-            
+
             <div className="bg-white rounded-xl shadow-soft p-6">
               <div className="flex items-center justify-between mb-4">
                 <div className="p-3 bg-sea-blue/10 rounded-lg">
                   <CreditCard className="h-6 w-6 text-sea-blue" />
                 </div>
-                <span className="text-xs font-medium text-sea-blue bg-sea-blue/10 px-2 py-1 rounded-full">+18%</span>
+                <span className="text-xs font-medium text-sea-blue bg-sea-blue/10 px-2 py-1 rounded-full">
+                  +18%
+                </span>
               </div>
-              <h3 className="text-2xl font-bold text-deep-charcoal">$123,456</h3>
+              <h3 className="text-2xl font-bold text-deep-charcoal">
+                $123,456
+              </h3>
               <p className="text-cool-gray">Total Revenue</p>
             </div>
           </div>
 
           {/* Quick Access */}
-          <h2 className="text-xl font-semibold text-deep-charcoal mb-4">Quick Access</h2>
+          <h2 className="text-xl font-semibold text-deep-charcoal mb-4">
+            Quick Access
+          </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
-            <Link to="/admin/categories" className="bg-white rounded-xl shadow-soft p-6 hover:shadow-blue transition-all duration-300 transform hover:-translate-y-1">
+            <Link
+              to="/admin/categories"
+              className="bg-white rounded-xl shadow-soft p-6 hover:shadow-blue transition-all duration-300 transform hover:-translate-y-1"
+            >
               <div className="flex items-center justify-between">
                 <div className="flex items-center">
                   <Tag className="h-8 w-8 text-natural-blue" />
@@ -164,14 +196,19 @@ const AdminDashboard = () => {
                     <h3 className="text-lg font-semibold text-deep-charcoal">
                       Categories
                     </h3>
-                    <p className="text-sm text-cool-gray">Manage trip categories</p>
+                    <p className="text-sm text-cool-gray">
+                      Manage trip categories
+                    </p>
                   </div>
                 </div>
                 <ChevronRight className="h-5 w-5 text-cool-gray" />
               </div>
             </Link>
 
-            <Link to="/admin/bookings" className="bg-white rounded-xl shadow-soft p-6 hover:shadow-blue transition-all duration-300 transform hover:-translate-y-1">
+            <Link
+              to="/admin/bookings"
+              className="bg-white rounded-xl shadow-soft p-6 hover:shadow-blue transition-all duration-300 transform hover:-translate-y-1"
+            >
               <div className="flex items-center justify-between">
                 <div className="flex items-center">
                   <Calendar className="h-8 w-8 text-warm-orange" />
@@ -179,14 +216,19 @@ const AdminDashboard = () => {
                     <h3 className="text-lg font-semibold text-deep-charcoal">
                       Bookings
                     </h3>
-                    <p className="text-sm text-cool-gray">Manage reservations</p>
+                    <p className="text-sm text-cool-gray">
+                      Manage reservations
+                    </p>
                   </div>
                 </div>
                 <ChevronRight className="h-5 w-5 text-cool-gray" />
               </div>
             </Link>
 
-            <Link to="/admin/trips" className="bg-white rounded-xl shadow-soft p-6 hover:shadow-blue transition-all duration-300 transform hover:-translate-y-1">
+            <Link
+              to="/admin/trips"
+              className="bg-white rounded-xl shadow-soft p-6 hover:shadow-blue transition-all duration-300 transform hover:-translate-y-1"
+            >
               <div className="flex items-center justify-between">
                 <div className="flex items-center">
                   <Map className="h-8 w-8 text-gentle-olive" />
@@ -201,7 +243,10 @@ const AdminDashboard = () => {
               </div>
             </Link>
 
-            <Link to="/admin/users" className="bg-white rounded-xl shadow-soft p-6 hover:shadow-blue transition-all duration-300 transform hover:-translate-y-1">
+            <Link
+              to="/admin/users"
+              className="bg-white rounded-xl shadow-soft p-6 hover:shadow-blue transition-all duration-300 transform hover:-translate-y-1"
+            >
               <div className="flex items-center justify-between">
                 <div className="flex items-center">
                   <Users className="h-8 w-8 text-sea-blue" />
@@ -216,7 +261,10 @@ const AdminDashboard = () => {
               </div>
             </Link>
 
-            <Link to="/admin/payments" className="bg-white rounded-xl shadow-soft p-6 hover:shadow-blue transition-all duration-300 transform hover:-translate-y-1">
+            <Link
+              to="/admin/payments"
+              className="bg-white rounded-xl shadow-soft p-6 hover:shadow-blue transition-all duration-300 transform hover:-translate-y-1"
+            >
               <div className="flex items-center justify-between">
                 <div className="flex items-center">
                   <CreditCard className="h-8 w-8 text-natural-blue" />
@@ -224,7 +272,9 @@ const AdminDashboard = () => {
                     <h3 className="text-lg font-semibold text-deep-charcoal">
                       Payments
                     </h3>
-                    <p className="text-sm text-cool-gray">Transaction history</p>
+                    <p className="text-sm text-cool-gray">
+                      Transaction history
+                    </p>
                   </div>
                 </div>
                 <ChevronRight className="h-5 w-5 text-cool-gray" />
@@ -291,4 +341,4 @@ const AdminDashboard = () => {
   );
 };
 
-export default AdminDashboard;
+export default Dashboard;
